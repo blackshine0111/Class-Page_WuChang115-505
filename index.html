@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head> 
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<template id="__bundler_thumbnail">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" data-bg-color="#eaf6ee">
+<template id="__bundler_thumbnail" data-bg-color="#eaf6ee">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
     <rect width="200" height="200" fill="#eaf6ee"/>
     <text x="100" y="120" font-size="72" text-anchor="middle" font-family="sans-serif">📖</text>
   </svg>
@@ -129,9 +129,10 @@
 
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px; flex-wrap:wrap;">
           <button onClick="{{ contactPrev }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">‹</button>
-          <span style="font-weight:700; font-size:16px; width:210px; text-align:center; white-space:nowrap;">{{ contactWeekLabel }}</span>
+          <span style="font-weight:700; font-size:16px; width:210px; text-align:center; white-space:nowrap;">{{ contactNavLabel }}</span>
           <button onClick="{{ contactNext }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">›</button>
-          <button onClick="{{ contactToday }}" style="margin-left:6px; padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200);">本週</button>
+          <button onClick="{{ contactToday }}" style="margin-left:6px; padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200); white-space:nowrap; flex-shrink:0;">本週</button>
+          <button onClick="{{ contactShowDay }}" style="padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200); white-space:nowrap; flex-shrink:0;">本日</button>
           <sc-if value="{{ sheetLoading }}" hint-placeholder-val="{{ false }}">
             <span style="margin-left:10px; font-size:12px; color:oklch(55% 0.02 200);">正在同步試算表…</span>
           </sc-if>
@@ -140,32 +141,56 @@
           </sc-if>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:14px;">
-          <sc-for list="{{ contactWeekDays }}" as="d" hint-placeholder-count="5">
-            <div style="display:flex; flex-direction:column; gap:10px;">
-              <div style="{{ d.headerStyle }}">
-                <span style="{{ d.weekdayStyle }}">{{ d.weekdayLabel }}</span>
-                <span style="{{ d.dayStyle }}">{{ d.dayLabel }}</span>
+        <sc-if value="{{ isContactWeekMode }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:14px;">
+            <sc-for list="{{ contactWeekDays }}" as="d" hint-placeholder-count="5">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="{{ d.headerStyle }}" onClick="{{ d.onClick }}">
+                  <span style="{{ d.weekdayStyle }}">{{ d.weekdayLabel }}</span>
+                  <span style="{{ d.dayStyle }}">{{ d.dayLabel }}</span>
+                </div>
+                <sc-if value="{{ d.hasEntries }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:white; border:1px solid oklch(92% 0.02 200); border-radius:16px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; box-shadow:0 4px 14px oklch(0% 0 0 / 0.04); cursor:pointer;" onClick="{{ d.onClick }}">
+                    <sc-for list="{{ d.entries }}" as="post" hint-placeholder-count="0">
+                      <div style="display:flex; align-items:baseline; gap:6px;">
+                        <span style="flex-shrink:0; font-size:13px; font-weight:700; color:oklch(45% 0.08 145);">{{ post.num }}.</span>
+                        <span style="font-size:13px; color:oklch(30% 0.02 200); line-height:1.6;">{{ post.summary }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ d.empty }}" hint-placeholder-val="{{ false }}">
+                  <div style="border:1.5px dashed oklch(90% 0.02 200); border-radius:16px; padding:20px 12px; display:flex; flex-direction:column; align-items:center; gap:4px; color:oklch(68% 0.02 200); cursor:pointer;" onClick="{{ d.onClick }}">
+                    <span style="font-size:20px;">🌿</span>
+                    <span style="font-size:12px;">無事項</span>
+                  </div>
+                </sc-if>
               </div>
-              <sc-if value="{{ d.hasEntries }}" hint-placeholder-val="{{ false }}">
-                <div style="background:white; border:1px solid oklch(92% 0.02 200); border-radius:16px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; box-shadow:0 4px 14px oklch(0% 0 0 / 0.04);">
-                  <sc-for list="{{ d.entries }}" as="post" hint-placeholder-count="0">
-                    <div style="display:flex; align-items:baseline; gap:6px;">
-                      <span style="flex-shrink:0; font-size:13px; font-weight:700; color:oklch(45% 0.08 145);">{{ post.num }}.</span>
-                      <span style="font-size:13px; color:oklch(30% 0.02 200); line-height:1.6;">{{ post.summary }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <sc-if value="{{ d.empty }}" hint-placeholder-val="{{ false }}">
-                <div style="border:1.5px dashed oklch(90% 0.02 200); border-radius:16px; padding:20px 12px; display:flex; flex-direction:column; align-items:center; gap:4px; color:oklch(68% 0.02 200);">
-                  <span style="font-size:20px;">🌿</span>
-                  <span style="font-size:12px;">無事項</span>
-                </div>
-              </sc-if>
-            </div>
-          </sc-for>
-        </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isContactDayMode }}" hint-placeholder-val="{{ false }}">
+          <div style="max-width:480px;">
+            <div style="font-weight:700; font-size:16px; margin-bottom:14px; color:oklch(35% 0.08 145);">{{ contactDayLabel }}</div>
+            <sc-if value="{{ contactDayHasEntries }}" hint-placeholder-val="{{ false }}">
+              <div style="background:white; border:1px solid oklch(92% 0.02 200); border-radius:16px; padding:18px 20px; display:flex; flex-direction:column; gap:12px; box-shadow:0 4px 14px oklch(0% 0 0 / 0.04);">
+                <sc-for list="{{ contactDayEntries }}" as="post" hint-placeholder-count="0">
+                  <div style="display:flex; align-items:baseline; gap:8px;">
+                    <span style="flex-shrink:0; font-size:14px; font-weight:700; color:oklch(45% 0.08 145);">{{ post.num }}.</span>
+                    <span style="font-size:14px; color:oklch(30% 0.02 200); line-height:1.7;">{{ post.summary }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ contactDayEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1.5px dashed oklch(90% 0.02 200); border-radius:16px; padding:32px 12px; display:flex; flex-direction:column; align-items:center; gap:6px; color:oklch(68% 0.02 200);">
+                <span style="font-size:24px;">🌿</span>
+                <span style="font-size:13px;">無事項</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
       </section>
     </sc-if>
 
@@ -180,7 +205,7 @@
             <button onClick="{{ calPrev }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">‹</button>
             <span style="font-weight:700; font-size:16px; min-width:110px; text-align:center;">{{ calLabel }}</span>
             <button onClick="{{ calNext }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">›</button>
-            <button onClick="{{ calToday }}" style="margin-left:6px; padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200);">今天</button>
+            <button onClick="{{ calToday }}" style="margin-left:6px; padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200); white-space:nowrap; flex-shrink:0;">今天</button>
           </div>
           <div style="display:flex; gap:4px; background:oklch(95% 0.02 200); border-radius:12px; padding:4px;">
             <button onClick="{{ calSetMonth }}" style="{{ calMonthBtnStyle }}">月</button>
@@ -197,18 +222,18 @@
 
         <sc-if value="{{ calIsMonth }}" hint-placeholder-val="{{ true }}">
           <div style="border:1px solid oklch(92% 0.02 200); border-radius:18px; overflow:hidden; background:white;">
-            <div style="display:grid; grid-template-columns:repeat(7,1fr); background:oklch(96% 0.03 145);">
+            <div style="display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); background:oklch(96% 0.03 145);">
               <sc-for list="{{ weekdayLabels }}" as="wl" hint-placeholder-count="7">
                 <div style="padding:10px 4px; text-align:center; font-size:12px; font-weight:700; color:oklch(45% 0.06 145);">{{ wl }}</div>
               </sc-for>
             </div>
             <sc-for list="{{ monthWeeks }}" as="week" hint-placeholder-count="5">
-              <div style="display:grid; grid-template-columns:repeat(7,1fr); border-top:1px solid oklch(94% 0.01 200);">
+              <div style="display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); border-top:1px solid oklch(94% 0.01 200);">
                 <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
                   <div style="{{ cell.style }}">
                     <span style="{{ cell.dayStyle }}">{{ cell.dayLabel }}</span>
                     <sc-for list="{{ cell.events }}" as="ev" hint-placeholder-count="0">
-                      <span style="display:block; font-size:11px; margin-top:3px; padding:2px 6px; border-radius:6px; background:oklch(93% 0.05 230); color:oklch(42% 0.1 230); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ ev.title }}</span>
+                      <span style="display:block; font-size:11px; margin-top:3px; padding:2px 6px; border-radius:6px; background:oklch(93% 0.05 230); color:oklch(42% 0.1 230); white-space:normal; overflow-wrap:break-word; line-height:1.4;">{{ ev.title }}</span>
                     </sc-for>
                   </div>
                 </sc-for>
@@ -218,7 +243,8 @@
         </sc-if>
 
         <sc-if value="{{ calIsWeek }}" hint-placeholder-val="{{ false }}">
-          <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:10px;">
+          <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -4px; padding:0 4px;">
+          <div style="display:grid; grid-template-columns:repeat(7, minmax(140px,1fr)); gap:10px; min-width:840px;">
             <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
               <div style="{{ d.cardStyle }}">
                 <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:10px;">
@@ -236,6 +262,7 @@
                 </sc-if>
               </div>
             </sc-for>
+          </div>
           </div>
         </sc-if>
       </section>
@@ -301,6 +328,7 @@ class Component extends DCLogic {
     leaveDate: '', leaveType: '病假', leaveReason: '', leaveSubmitted: false, leaveError: '',
     calendarView: 'month', calendarAnchor: new Date(2026, 8, 1).toISOString(),
     contactAnchor: new Date().toISOString(),
+    contactViewMode: 'week', contactSelectedDate: new Date().toISOString(),
     sheetItems: null, sheetLoading: true, sheetError: null,
   };
 
@@ -456,9 +484,27 @@ class Component extends DCLogic {
     return items;
   }
 
-  contactPrev = () => { const d = new Date(this.state.contactAnchor); d.setDate(d.getDate() - 7); this.setState({ contactAnchor: d.toISOString() }); };
-  contactNext = () => { const d = new Date(this.state.contactAnchor); d.setDate(d.getDate() + 7); this.setState({ contactAnchor: d.toISOString() }); };
-  contactToday = () => this.setState({ contactAnchor: new Date().toISOString() });
+  contactPrev = () => {
+    if (this.state.contactViewMode === 'day') {
+      const d = new Date(this.state.contactSelectedDate); d.setDate(d.getDate() - 1);
+      this.setState({ contactSelectedDate: d.toISOString() });
+    } else {
+      const d = new Date(this.state.contactAnchor); d.setDate(d.getDate() - 7);
+      this.setState({ contactAnchor: d.toISOString() });
+    }
+  };
+  contactNext = () => {
+    if (this.state.contactViewMode === 'day') {
+      const d = new Date(this.state.contactSelectedDate); d.setDate(d.getDate() + 1);
+      this.setState({ contactSelectedDate: d.toISOString() });
+    } else {
+      const d = new Date(this.state.contactAnchor); d.setDate(d.getDate() + 7);
+      this.setState({ contactAnchor: d.toISOString() });
+    }
+  };
+  contactToday = () => this.setState({ contactAnchor: new Date().toISOString(), contactViewMode: 'week' });
+  contactShowDay = () => this.setState({ contactSelectedDate: new Date().toISOString(), contactViewMode: 'day' });
+  contactSelectDay = (iso) => this.setState({ contactSelectedDate: iso, contactViewMode: 'day' });
 
   goTo = (id) => {
     this.setState({ page: id });
@@ -551,16 +597,22 @@ class Component extends DCLogic {
     })).sort((a, b) => b.dateObj - a.dateObj);
 
     const contactAnchor = new Date(this.state.contactAnchor);
-    const contactWeekdayNames = ['一', '二', '三', '四', '五'];
+    const contactWeekdayNames = ['一', '二', '三', '四', '五', '六', '日'];
     const contactMonday = new Date(contactAnchor); contactMonday.setDate(contactAnchor.getDate() - ((contactAnchor.getDay() + 6) % 7));
     const contactWeekDays = Array.from({ length: 5 }, (_, i) => {
       const dt = new Date(contactMonday); dt.setDate(contactMonday.getDate() + i);
       const entries = announcements.filter((a) => a.dateObj.getFullYear() === dt.getFullYear() && a.dateObj.getMonth() === dt.getMonth() && a.dateObj.getDate() === dt.getDate()).map((a, idx) => ({ ...a, num: idx + 1 }));
       const isToday = dt.toDateString() === new Date().toDateString();
-      return { key: dt.toISOString(), weekdayLabel: '週' + contactWeekdayNames[i], dayLabel: (dt.getMonth() + 1) + '/' + dt.getDate(), entries, hasEntries: entries.length > 0, empty: entries.length === 0, isToday };
+      return { key: dt.toISOString(), iso: dt.toISOString(), weekdayLabel: '週' + contactWeekdayNames[i], dayLabel: (dt.getMonth() + 1) + '/' + dt.getDate(), entries, hasEntries: entries.length > 0, empty: entries.length === 0, isToday };
     });
     const contactFriday = new Date(contactMonday); contactFriday.setDate(contactMonday.getDate() + 4);
     const contactWeekLabel = `${contactMonday.getFullYear()}/${contactMonday.getMonth() + 1}/${contactMonday.getDate()} - ${contactFriday.getFullYear()}/${contactFriday.getMonth() + 1}/${contactFriday.getDate()}`;
+
+    const isContactDayMode = this.state.contactViewMode === 'day';
+    const contactSelectedDateObj = new Date(this.state.contactSelectedDate);
+    const contactDayEntries = announcements.filter((a) => a.dateObj.getFullYear() === contactSelectedDateObj.getFullYear() && a.dateObj.getMonth() === contactSelectedDateObj.getMonth() && a.dateObj.getDate() === contactSelectedDateObj.getDate()).map((a, idx) => ({ ...a, num: idx + 1 }));
+    const contactDayWeekdayNames = ['日', '一', '二', '三', '四', '五', '六'];
+    const contactDayLabel = `${contactSelectedDateObj.getFullYear()}/${contactSelectedDateObj.getMonth() + 1}/${contactSelectedDateObj.getDate()}（週${contactDayWeekdayNames[contactSelectedDateObj.getDay()]}）`;
 
     const rawEvents = (this.state.calendarItems && this.state.calendarItems.length) ? this.state.calendarItems : [
       { y: 2026, m: 7, d: 28, title: '學生返校日', time: '全天' },
@@ -608,12 +660,12 @@ class Component extends DCLogic {
         weeks.push({
           key: i, cells: cellsRaw.slice(i, i + 7).map((dt, idx) => dt ? {
             key: dt.toISOString(), dayLabel: dt.getDate(), inMonth: true,
-            style: { minHeight: '80px', padding: '8px', borderRight: idx < 6 ? '1px solid oklch(94% 0.01 200)' : 'none' },
+            style: { minHeight: '80px', minWidth: 0, padding: '8px', borderRight: idx < 6 ? '1px solid oklch(94% 0.01 200)' : 'none' },
             dayStyle: { fontSize: '13px', fontWeight: 600, color: 'oklch(35% 0.02 200)' },
             events: eventsOn(dt),
           } : {
             key: 'blank-' + i + '-' + idx, dayLabel: '', inMonth: false,
-            style: { minHeight: '80px', padding: '8px', background: 'oklch(98% 0.005 200)', borderRight: idx < 6 ? '1px solid oklch(94% 0.01 200)' : 'none' },
+            style: { minHeight: '80px', minWidth: 0, padding: '8px', background: 'oklch(98% 0.005 200)', borderRight: idx < 6 ? '1px solid oklch(94% 0.01 200)' : 'none' },
             dayStyle: {}, events: [],
           }),
         });
@@ -655,11 +707,16 @@ class Component extends DCLogic {
       homeAnnouncements: announcements.slice(0, 3),
       contactWeekDays: contactWeekDays.map((d) => ({
         ...d,
-        headerStyle: { display: 'flex', alignItems: 'baseline', gap: '6px', padding: '6px 10px', borderRadius: '10px', background: d.isToday ? 'oklch(58% 0.12 145)' : 'oklch(95% 0.02 200)' },
+        onClick: () => this.contactSelectDay(d.iso),
+        headerStyle: { display: 'flex', alignItems: 'baseline', gap: '6px', padding: '6px 10px', borderRadius: '10px', background: d.isToday ? 'oklch(58% 0.12 145)' : 'oklch(95% 0.02 200)', cursor: 'pointer' },
         weekdayStyle: { fontSize: '13px', fontWeight: 600, color: d.isToday ? 'white' : 'oklch(45% 0.02 200)' },
         dayStyle: { fontSize: '18px', fontWeight: 800, color: d.isToday ? 'white' : 'oklch(35% 0.08 145)' },
       })),
       contactWeekLabel, contactPrev: this.contactPrev, contactNext: this.contactNext, contactToday: this.contactToday,
+      contactShowDay: this.contactShowDay,
+      isContactWeekMode: !isContactDayMode, isContactDayMode,
+      contactDayLabel, contactDayEntries, contactDayHasEntries: contactDayEntries.length > 0, contactDayEmpty: contactDayEntries.length === 0,
+      contactNavLabel: isContactDayMode ? contactDayLabel : contactWeekLabel,
       sheetLoading: this.state.sheetLoading, sheetError: this.state.sheetError,
       galleryItems, albumUrl,
       calIsMonth: !isWeekView, calIsWeek: isWeekView,
