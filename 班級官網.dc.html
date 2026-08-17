@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" data-bg-color="#eaf6ee">
+    <rect width="200" height="200" fill="#eaf6ee"/>
+    <text x="100" y="120" font-size="72" text-anchor="middle" font-family="sans-serif">📖</text>
+  </svg>
+</template>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; background: oklch(99% 0.004 145); }
+    * { box-sizing: border-box; }
+    ::placeholder { color: oklch(55% 0.02 200); }
+  </style>
+</helmet>
+
+<div style="font-family:'Noto Sans TC', sans-serif; color:oklch(28% 0.02 200); min-height:100vh; display:flex; flex-direction:column; background:oklch(99% 0.004 145);">
+
+  <!-- Header -->
+  <header style="position:sticky; top:0; z-index:20; background:oklch(99% 0.006 145 / 0.92); backdrop-filter:blur(8px); border-bottom:1px solid oklch(90% 0.03 145); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; padding:14px clamp(16px,4vw,48px);">
+    <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onClick="{{ () =&gt; goTo('home') }}">
+      <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, oklch(78% 0.09 145), oklch(80% 0.08 230)); display:flex; align-items:center; justify-content:center; font-weight:900; color:white; font-size:18px; flex-shrink:0;">5-5</div>
+      <div style="display:flex; flex-direction:column; line-height:1.25;">
+        <span style="font-size:12px; color:oklch(50% 0.03 200); letter-spacing:0.05em;">台北市立五常國小</span>
+        <span style="font-size:19px; font-weight:700; color:oklch(30% 0.03 200);">五年五班・溫馨園地</span>
+      </div>
+    </div>
+
+    <nav style="display:flex; align-items:center; gap:4px; flex-wrap:wrap;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+        <button style="{{ item.style }}" onClick="{{ item.onClick }}">{{ item.label }}</button>
+      </sc-for>
+    </nav>
+
+  </header>
+
+  <main style="flex:1; display:flex; flex-direction:column;">
+
+    <!-- HOME -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <section>
+        <div style="position:relative; margin:clamp(16px,3vw,32px); border-radius:28px; overflow:hidden; min-height:clamp(320px,52vw,460px); display:flex; align-items:center;">
+          <img src="uploads/hero-cover.jpg" alt="班級活動合照" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:bottom;">
+          <div style="position:relative; max-width:640px; padding:40px clamp(20px,5vw,64px); display:flex; flex-direction:column; gap:20px; background:linear-gradient(90deg, oklch(99% 0 0 / 0.55), transparent);">
+            <h1 style="margin:0; font-size:clamp(28px,4.2vw,46px); font-weight:900; line-height:1.3; color:oklch(26% 0.03 200);">記錄學習的每一個美好瞬間，陪伴孩子快樂成長</h1>
+            <p style="margin:0; font-size:clamp(15px,1.6vw,18px); color:oklch(38% 0.03 200); line-height:1.7;">歡迎來到五年五班的班級官網，掌握公告、行事曆與孩子的成長紀錄。</p>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; margin:0 clamp(16px,3vw,32px) 40px;">
+          <sc-for list="{{ quickCards }}" as="card" hint-placeholder-count="3">
+            <button style="{{ card.style }}" onClick="{{ card.onClick }}">
+              <span style="{{ card.iconWrapStyle }}">{{ card.icon }}</span>
+              <span style="font-size:17px; font-weight:700; color:oklch(28% 0.03 200);">{{ card.title }}</span>
+              <span style="font-size:13px; color:oklch(48% 0.02 200); line-height:1.6;">{{ card.desc }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="margin:0 clamp(16px,3vw,32px) 48px;">
+          <h2 style="font-size:20px; font-weight:800; margin:0 0 16px; color:oklch(30% 0.03 200);">好站分享</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:16px;">
+            <a href="https://www.wcps.tp.edu.tw/nss/p/index" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:10px; background:white; border:1px solid oklch(92% 0.02 200); border-radius:18px; padding:20px 14px; text-decoration:none; text-align:center; min-height:200px;">
+              <div style="height:136px; display:flex; align-items:center; justify-content:center;">
+                <div style="width:88px; height:88px; border-radius:14px; overflow:hidden; background:white; display:flex; align-items:center; justify-content:center;">
+                  <img src="uploads/pasted-1786937132086-0.png" alt="五常國小" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+              </div>
+              <span style="font-size:17px; font-weight:700; color:oklch(30% 0.03 200); display:flex; align-items:center; flex:1;">五常國小</span>
+            </a>
+            <a href="https://www.junyiacademy.org/" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:10px; background:white; border:1px solid oklch(92% 0.02 200); border-radius:18px; padding:20px 14px; text-decoration:none; text-align:center; min-height:200px;">
+              <div style="height:136px; display:flex; align-items:center; justify-content:center;">
+                <div style="width:88px; height:88px; border-radius:14px; overflow:hidden; background:white; display:flex; align-items:center; justify-content:center;">
+                  <img src="uploads/pasted-1786937219557-0.png" alt="均一教育平台" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+              </div>
+              <span style="font-size:17px; font-weight:700; color:oklch(30% 0.03 200); display:flex; align-items:center; flex:1;">均一教育平台</span>
+            </a>
+            <a href="https://www.pagamo.org/" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:10px; background:white; border:1px solid oklch(92% 0.02 200); border-radius:18px; padding:20px 14px; text-decoration:none; text-align:center; min-height:200px;">
+              <div style="height:136px; display:flex; align-items:center; justify-content:center;">
+                <div style="width:112px; height:112px; border-radius:14px; overflow:hidden; background:white; display:flex; align-items:center; justify-content:center;">
+                  <img src="uploads/pasted-1786937224067-0.png" alt="PaGamo" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+              </div>
+              <span style="font-size:17px; font-weight:700; color:oklch(30% 0.03 200); display:flex; align-items:center; flex:1;">PaGamo</span>
+            </a>
+            <a href="https://adl.edu.tw/HomePage/home/" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:10px; background:white; border:1px solid oklch(92% 0.02 200); border-radius:18px; padding:20px 14px; text-decoration:none; text-align:center; min-height:200px;">
+              <div style="height:136px; display:flex; align-items:center; justify-content:center;">
+                <div style="width:112px; height:112px; border-radius:14px; overflow:hidden; background:white; display:flex; align-items:center; justify-content:center;">
+                  <img src="uploads/pasted-1786937228742-0.png" alt="教育部因材網" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+              </div>
+              <span style="font-size:17px; font-weight:700; color:oklch(30% 0.03 200); display:flex; align-items:center; flex:1;">教育部因材網</span>
+            </a>
+            <a href="https://dict.concised.moe.edu.tw/search.jsp?la=0&powerMode=0" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:10px; background:white; border:1px solid oklch(92% 0.02 200); border-radius:18px; padding:20px 14px; text-decoration:none; text-align:center; min-height:200px;">
+              <div style="height:136px; display:flex; align-items:center; justify-content:center;">
+                <div style="width:136px; height:136px; border-radius:14px; overflow:hidden; background:white; display:flex; align-items:center; justify-content:center;">
+                  <img src="uploads/pasted-1786937233833-0.png" alt="教育部國語辭典" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+              </div>
+              <span style="font-size:17px; font-weight:700; color:oklch(30% 0.03 200); display:flex; align-items:center; flex:1;">教育部國語辭典</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- ANNOUNCEMENTS -->
+    <sc-if value="{{ isAnnouncements }}" hint-placeholder-val="{{ false }}">
+      <section style="padding:0 clamp(16px,3vw,32px) 56px;">
+        <div style="border-radius:24px; overflow:hidden; margin:16px 0 28px;">
+          <img src="uploads/contact-cover.jpg" alt="班級上課情景" style="width:100%; height:clamp(140px,22vw,260px); object-fit:cover; display:block;">
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
+          <span style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg, oklch(78% 0.09 145), oklch(80% 0.08 230)); display:flex; align-items:center; justify-content:center; font-size:20px;">📖</span>
+          <h1 style="font-size:26px; font-weight:800; margin:0;">聯絡簿</h1>
+        </div>
+        <p style="margin:0 0 24px; color:oklch(48% 0.02 200); font-size:14px;">依週查看班級公告、活動與作業提醒</p>
+
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px; flex-wrap:wrap;">
+          <button onClick="{{ contactPrev }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">‹</button>
+          <span style="font-weight:700; font-size:16px; width:210px; text-align:center; white-space:nowrap;">{{ contactWeekLabel }}</span>
+          <button onClick="{{ contactNext }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">›</button>
+          <button onClick="{{ contactToday }}" style="margin-left:6px; padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200);">本週</button>
+          <sc-if value="{{ sheetLoading }}" hint-placeholder-val="{{ false }}">
+            <span style="margin-left:10px; font-size:12px; color:oklch(55% 0.02 200);">正在同步試算表…</span>
+          </sc-if>
+          <sc-if value="{{ sheetError }}" hint-placeholder-val="{{ false }}">
+            <span style="margin-left:10px; font-size:12px; color:oklch(50% 0.15 25);">{{ sheetError }}</span>
+          </sc-if>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:14px;">
+          <sc-for list="{{ contactWeekDays }}" as="d" hint-placeholder-count="5">
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="{{ d.headerStyle }}">
+                <span style="{{ d.weekdayStyle }}">{{ d.weekdayLabel }}</span>
+                <span style="{{ d.dayStyle }}">{{ d.dayLabel }}</span>
+              </div>
+              <sc-if value="{{ d.hasEntries }}" hint-placeholder-val="{{ false }}">
+                <div style="background:white; border:1px solid oklch(92% 0.02 200); border-radius:16px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; box-shadow:0 4px 14px oklch(0% 0 0 / 0.04);">
+                  <sc-for list="{{ d.entries }}" as="post" hint-placeholder-count="0">
+                    <div style="display:flex; align-items:baseline; gap:6px;">
+                      <span style="flex-shrink:0; font-size:13px; font-weight:700; color:oklch(45% 0.08 145);">{{ post.num }}.</span>
+                      <span style="font-size:13px; color:oklch(30% 0.02 200); line-height:1.6;">{{ post.summary }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ d.empty }}" hint-placeholder-val="{{ false }}">
+                <div style="border:1.5px dashed oklch(90% 0.02 200); border-radius:16px; padding:20px 12px; display:flex; flex-direction:column; align-items:center; gap:4px; color:oklch(68% 0.02 200);">
+                  <span style="font-size:20px;">🌿</span>
+                  <span style="font-size:12px;">無事項</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- CALENDAR -->
+    <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ false }}">
+      <section style="padding:32px clamp(16px,3vw,32px) 56px;">
+        <h1 style="font-size:26px; font-weight:800; margin:0 0 6px;">班級行事曆</h1>
+        <p style="margin:0 0 24px; color:oklch(48% 0.02 200); font-size:14px;">近期重要活動與日程</p>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:18px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button onClick="{{ calPrev }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">‹</button>
+            <span style="font-weight:700; font-size:16px; min-width:110px; text-align:center;">{{ calLabel }}</span>
+            <button onClick="{{ calNext }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">›</button>
+            <button onClick="{{ calToday }}" style="margin-left:6px; padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200);">今天</button>
+          </div>
+          <div style="display:flex; gap:4px; background:oklch(95% 0.02 200); border-radius:12px; padding:4px;">
+            <button onClick="{{ calSetMonth }}" style="{{ calMonthBtnStyle }}">月</button>
+            <button onClick="{{ calSetWeek }}" style="{{ calWeekBtnStyle }}">週</button>
+          </div>
+          <sc-if value="{{ calendarLoading }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:12px; color:oklch(55% 0.02 200);">正在同步試算表…</span>
+          </sc-if>
+          <sc-if value="{{ calendarError }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:12px; color:oklch(50% 0.15 25);">{{ calendarError }}</span>
+          </sc-if>
+
+        </div>
+
+        <sc-if value="{{ calIsMonth }}" hint-placeholder-val="{{ true }}">
+          <div style="border:1px solid oklch(92% 0.02 200); border-radius:18px; overflow:hidden; background:white;">
+            <div style="display:grid; grid-template-columns:repeat(7,1fr); background:oklch(96% 0.03 145);">
+              <sc-for list="{{ weekdayLabels }}" as="wl" hint-placeholder-count="7">
+                <div style="padding:10px 4px; text-align:center; font-size:12px; font-weight:700; color:oklch(45% 0.06 145);">{{ wl }}</div>
+              </sc-for>
+            </div>
+            <sc-for list="{{ monthWeeks }}" as="week" hint-placeholder-count="5">
+              <div style="display:grid; grid-template-columns:repeat(7,1fr); border-top:1px solid oklch(94% 0.01 200);">
+                <sc-for list="{{ week.cells }}" as="cell" hint-placeholder-count="7">
+                  <div style="{{ cell.style }}">
+                    <span style="{{ cell.dayStyle }}">{{ cell.dayLabel }}</span>
+                    <sc-for list="{{ cell.events }}" as="ev" hint-placeholder-count="0">
+                      <span style="display:block; font-size:11px; margin-top:3px; padding:2px 6px; border-radius:6px; background:oklch(93% 0.05 230); color:oklch(42% 0.1 230); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ ev.title }}</span>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ calIsWeek }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:10px;">
+            <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+              <div style="{{ d.cardStyle }}">
+                <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:10px;">
+                  <span style="font-size:12px; font-weight:600; color:oklch(45% 0.02 200);">{{ d.weekdayLabel }}</span>
+                  <span style="{{ d.dayStyle }}">{{ d.dayLabel }}</span>
+                </div>
+                <sc-for list="{{ d.events }}" as="ev" hint-placeholder-count="0">
+                  <div style="background:oklch(96% 0.03 230); border-radius:10px; padding:8px 10px; margin-bottom:6px;">
+                    <div style="font-size:13px; font-weight:700; color:oklch(35% 0.08 230);">{{ ev.title }}</div>
+                    <div style="font-size:12px; color:oklch(48% 0.02 200);">{{ ev.time }}</div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ d.empty }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:12px; color:oklch(65% 0.02 200);">無活動</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <!-- GALLERY -->
+    <sc-if value="{{ isGallery }}" hint-placeholder-val="{{ false }}">
+      <section style="padding:32px clamp(16px,3vw,32px) 56px;">
+        <h1 style="font-size:26px; font-weight:800; margin:0 0 6px;">相簿花絮</h1>
+        <p style="margin:0 0 24px; color:oklch(48% 0.02 200); font-size:14px;">記錄班級生活的精彩片段</p>
+        <a href="https://e.pcloud.link/publink/show?code=kZKMQy7ZL8S6JqjykvmIzdPGl3o21L6XI6s7" target="_blank" rel="noopener" style="display:block; border-radius:20px; overflow:hidden; margin-bottom:16px;">
+          <img src="uploads/gallery-cover.jpg" alt="相簿花絮封面" style="width:100%; height:clamp(160px,26vw,320px); object-fit:cover; display:block;">
+        </a>
+        <div style="display: flex; flex-direction: column; gap: 16px; width: 100%; height: auto">
+          <a href="{{ albumUrl }}" target="_blank" rel="noopener" style="align-self:center; padding:12px 24px; border-radius:12px; background:oklch(55% 0.1 230); color:white; font-weight:700; font-size:14px; text-decoration:none;">前往雲端相簿查看全部照片</a>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <!-- Footer -->
+  <footer style="background:oklch(95% 0.025 200); border-top:1px solid oklch(90% 0.02 200); padding:clamp(28px,4vw,44px) clamp(16px,3vw,32px); margin-top:auto;">
+    <div style="display:flex; align-items:center; gap:28px; flex-wrap:wrap; justify-content:space-between; background:white; border:1px solid oklch(90% 0.02 30); border-radius:24px; padding:24px 32px; max-width:1200px; margin:0 auto 32px;">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div style="width:68px; height:68px; border-radius:50%; overflow:hidden; flex-shrink:0;">
+          <img src="uploads/teacher-photo.jpg" alt="導師照片" style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+        <div style="display:flex; flex-direction:column; line-height:1.5;">
+          <span style="font-weight:700; font-size:18px; color:oklch(30% 0.03 200);">台北市立五常國小</span>
+          <span style="font-size:15px; color:oklch(50% 0.02 200);">115學年度 505班｜導師 林宓勤</span>
+        </div>
+      </div>
+      <div style="flex:1; min-width:280px; border:1px solid oklch(90% 0.05 30); border-radius:16px; padding:14px 26px; text-align:center; background:oklch(98% 0.015 30);">
+        <div style="font-size:18px; font-weight:600; color:oklch(35% 0.03 200);">「用心照顧好每一位學生，用生命影響生命」</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="width:72px; height:72px; flex-shrink:0;">
+          <img src="uploads/M_gainfriends_2dbarcodes_BW.png" alt="LINE QR" style="width:100%; height:100%; object-fit:contain; display:block;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
+          <span style="background:oklch(65% 0.15 145); color:white; font-size:13px; font-weight:700; padding:4px 12px; border-radius:999px;">官方 LINE@</span>
+          <span style="font-size:15px; color:oklch(40% 0.02 200);">@888tirpj</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr; max-width:1080px; margin:0 auto 24px;">
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; color:oklch(45% 0.02 200); line-height:1.8;">
+        <span style="font-weight:700; color:oklch(30% 0.03 200); font-size:14px;">隱私聲明</span>
+        <span>本網站僅供班級親師溝通使用，學生個人資料（座號、成績、請假紀錄）僅授權家長本人查閱，請勿轉發或公開分享。</span>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:12px; color:oklch(52% 0.02 200); border-top:1px solid oklch(88% 0.02 200); padding-top:16px;">© 2026 台北市立五常國小 五年五班・溫馨園地　版權所有</div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;strictLoginDemo&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;行為設定&quot;}, &quot;leaveFormRequireReason&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;行為設定&quot;}}">
+class Component extends DCLogic {
+  state = {
+    page: 'home',
+    loggedIn: false,
+    seatInput: '', codeInput: '', loginError: '',
+    leaveDate: '', leaveType: '病假', leaveReason: '', leaveSubmitted: false, leaveError: '',
+    calendarView: 'month', calendarAnchor: new Date(2026, 8, 1).toISOString(),
+    contactAnchor: new Date().toISOString(),
+    sheetItems: null, sheetLoading: true, sheetError: null,
+  };
+
+  componentDidMount() {
+    this.fetchSheetData();
+    this.fetchCalendarData();
+  }
+
+  fetchCalendarData = () => {
+    this.setState({ calendarLoading: true, calendarError: null, calendarItems: null });
+    const sheetId = '1heLqbPZQBgOZDj8TT-NL8B9p_lb8PLA2lgIWA02Ohfk';
+    const sheetNames = ['2026.08','2026.09','2026.10','2026.11','2026.12','2027.01','2027.02','2027.03','2027.04','2027.05','2027.06','2027.07'];
+    let pending = sheetNames.length;
+    let combined = [];
+    let fetchedOk = 0;
+    const finish = () => {
+      pending -= 1;
+      if (pending <= 0) {
+        this.setState({
+          calendarItems: fetchedOk > 0 ? combined : null,
+          calendarLoading: false,
+          calendarError: fetchedOk > 0 ? null : '無法連線至行事曆試算表，顯示預設內容',
+        });
+      }
+    };
+    sheetNames.forEach((sheetName) => {
+      const cbName = '__calSheetCb_' + Math.random().toString(36).slice(2);
+      const script = document.createElement('script');
+      const cleanup = () => { delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); };
+      const timeoutId = setTimeout(() => { if (window[cbName]) { cleanup(); finish(); } }, 8000);
+      window[cbName] = (json) => {
+        clearTimeout(timeoutId);
+        try {
+          const rows = (json && json.table && json.table.rows) || [];
+          fetchedOk += 1;
+          const items = this.parseCalendarRows(rows);
+          if (items.length) combined = combined.concat(items);
+        } catch (e) { /* ignore this sheet */ }
+        cleanup();
+        finish();
+      };
+      script.onerror = () => { clearTimeout(timeoutId); cleanup(); finish(); };
+      script.src = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}&sheet=${encodeURIComponent(sheetName)}`;
+      document.body.appendChild(script);
+    });
+  };
+
+  parseCalendarRows(rows) {
+    const excelSerialToDate = (serial) => {
+      const utcDays = Math.floor(serial - 25569);
+      const d = new Date(utcDays * 86400 * 1000);
+      return { y: d.getUTCFullYear(), m: d.getUTCMonth(), d: d.getUTCDate() };
+    };
+    const parseFullDateCell = (cell) => {
+      if (!cell || cell.v == null) return null;
+      const v = cell.v;
+      if (typeof v === 'string' && v.startsWith('Date(')) {
+        const mm = v.match(/Date\((\d+),(\d+),(\d+)/);
+        if (mm) return { y: parseInt(mm[1], 10), m: parseInt(mm[2], 10), d: parseInt(mm[3], 10) };
+      }
+      if (typeof v === 'number' && v > 20000 && v < 60000) return excelSerialToDate(v);
+      return null;
+    };
+    const items = [];
+    for (let r = 0; r < rows.length - 1; r++) {
+      const cells = (rows[r] && rows[r].c) || [];
+      const nextCells = (rows[r + 1] && rows[r + 1].c) || [];
+      for (let c = 0; c < cells.length; c++) {
+        const date = parseFullDateCell(cells[c]);
+        if (!date) continue;
+        const noteCell = nextCells[c];
+        if (parseFullDateCell(noteCell)) continue;
+        const noteText = noteCell && noteCell.v != null ? String(noteCell.v).trim() : '';
+        if (!noteText || noteText.startsWith('Date(')) continue;
+        noteText.split(/\n+/).forEach((line) => {
+          const title = line.trim();
+          if (title && !title.startsWith('Date(')) items.push({ y: date.y, m: date.m, d: date.d, title, time: '全天' });
+        });
+      }
+    }
+    return items;
+  }
+
+  fetchSheetData = () => {
+    this.setState({ sheetLoading: true, sheetError: null, sheetItems: null });
+    const sheetId = '1gY2fiurdYEUBBxIiEsxHA56AigMrkJpCheyEfWbH6c8';
+    const year = new Date().getFullYear();
+    const sheetNames = Array.from({ length: 12 }, (_, i) => `${year}.${i + 1}月`);
+    let pending = sheetNames.length;
+    let combined = [];
+    let anySuccess = false;
+    const finish = () => {
+      pending -= 1;
+      if (pending <= 0) {
+        const seen = new Set();
+        const deduped = combined.filter((it) => {
+          const key = `${it.y}-${it.m}-${it.d}-${it.summary}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+        this.setState({
+          sheetItems: deduped.length ? deduped : null,
+          sheetLoading: false,
+          sheetError: anySuccess ? null : '無法取得試算表工作表資料，顯示預設內容',
+        });
+      }
+    };
+    sheetNames.forEach((sheetName) => {
+      const cbName = '__contactSheetCb_' + Math.random().toString(36).slice(2);
+      const script = document.createElement('script');
+      const cleanup = () => { delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); };
+      const timeoutId = setTimeout(() => { if (window[cbName]) { cleanup(); finish(); } }, 8000);
+      window[cbName] = (json) => {
+        clearTimeout(timeoutId);
+        try {
+          const rows = (json && json.table && json.table.rows) || [];
+          const items = this.parseSheetRows(rows);
+          if (items.length) { anySuccess = true; combined = combined.concat(items); }
+        } catch (e) { /* ignore this sheet */ }
+        cleanup();
+        finish();
+      };
+      script.onerror = () => { clearTimeout(timeoutId); cleanup(); finish(); };
+      script.src = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}&sheet=${encodeURIComponent(sheetName)}`;
+      document.body.appendChild(script);
+    });
+  };
+
+  parseSheetRows(rows) {
+    const year = new Date().getFullYear();
+    const headerRe = /(\d{1,2})月(\d{1,2})日/;
+    const items = [];
+    const colCount = rows.reduce((max, row) => Math.max(max, (row.c || []).length), 0);
+    for (let c = 0; c < colCount; c++) {
+      let current = null;
+      rows.forEach((row) => {
+        const cell = row && row.c && row.c[c];
+        const text = cell && (cell.v != null) ? String(cell.v).trim() : '';
+        if (!text) return;
+        const m = text.match(headerRe);
+        if (m && text.length <= 12) {
+          current = { y: year, m: parseInt(m[1], 10) - 1, d: parseInt(m[2], 10) };
+        } else if (current) {
+          let tag = '通知';
+          if (/考|評量|測驗/.test(text)) tag = '考試';
+          else if (/練習|習題/.test(text)) tag = '練習';
+          else if (/作|本p\.|習作/.test(text)) tag = '作業';
+          items.push({ y: current.y, m: current.m, d: current.d, tag, title: text.length > 30 ? text.slice(0, 30) + '…' : text, summary: text });
+        }
+      });
+    }
+    return items;
+  }
+
+  contactPrev = () => { const d = new Date(this.state.contactAnchor); d.setDate(d.getDate() - 7); this.setState({ contactAnchor: d.toISOString() }); };
+  contactNext = () => { const d = new Date(this.state.contactAnchor); d.setDate(d.getDate() + 7); this.setState({ contactAnchor: d.toISOString() }); };
+  contactToday = () => this.setState({ contactAnchor: new Date().toISOString() });
+
+  goTo = (id) => {
+    this.setState({ page: id });
+    window.scrollTo(0, 0);
+  };
+
+  calSetMonth = () => this.setState({ calendarView: 'month' });
+  calSetWeek = () => this.setState({ calendarView: 'week' });
+  calPrev = () => this.shiftCalendar(-1);
+  calNext = () => this.shiftCalendar(1);
+  calToday = () => this.setState({ calendarAnchor: new Date(2026, 8, 1).toISOString() });
+
+  shiftCalendar(delta) {
+    const d = new Date(this.state.calendarAnchor);
+    if (this.state.calendarView === 'month') d.setMonth(d.getMonth() + delta);
+    else d.setDate(d.getDate() + delta * 7);
+    this.setState({ calendarAnchor: d.toISOString() });
+  }
+
+  onSeatChange = (e) => this.setState({ seatInput: e.target.value, loginError: '' });
+  onCodeChange = (e) => this.setState({ codeInput: e.target.value, loginError: '' });
+
+  handleLogin = () => {
+    const { seatInput, codeInput } = this.state;
+    if (!seatInput.trim()) { this.setState({ loginError: '請輸入學生座號' }); return; }
+    const strict = this.props.strictLoginDemo ?? false;
+    if (strict && codeInput.trim() !== '1234') { this.setState({ loginError: '驗證碼錯誤，示範代碼為 1234' }); return; }
+    if (!strict && !codeInput.trim()) { this.setState({ loginError: '請輸入驗證碼' }); return; }
+    this.setState({ loggedIn: true, loginError: '' });
+  };
+
+  handleLogout = () => this.setState({ loggedIn: false, seatInput: '', codeInput: '', leaveSubmitted: false });
+
+  onLeaveDateChange = (e) => this.setState({ leaveDate: e.target.value, leaveError: '' });
+  onLeaveTypeChange = (e) => this.setState({ leaveType: e.target.value });
+  onLeaveReasonChange = (e) => this.setState({ leaveReason: e.target.value, leaveError: '' });
+
+  handleLeaveSubmit = () => {
+    const { leaveDate, leaveReason } = this.state;
+    const requireReason = this.props.leaveFormRequireReason ?? true;
+    if (!leaveDate) { this.setState({ leaveError: '請選擇請假日期' }); return; }
+    if (requireReason && !leaveReason.trim()) { this.setState({ leaveError: '請填寫事由說明' }); return; }
+    this.setState({ leaveSubmitted: true, leaveError: '' });
+  };
+
+  renderVals() {
+    const page = this.state.page;
+    const green = 'oklch(58% 0.12 145)';
+    const activeStyle = { padding: '9px 16px', borderRadius: '10px', border: 'none', background: green, color: 'white', fontWeight: 700, fontSize: '14px', cursor: 'pointer' };
+    const inactiveStyle = { padding: '9px 16px', borderRadius: '10px', border: 'none', background: 'transparent', color: 'oklch(35% 0.02 200)', fontWeight: 600, fontSize: '14px', cursor: 'pointer' };
+
+    const labels = { home: '首頁', announcements: '聯絡簿', calendar: '行事曆', gallery: '相簿花絮' };
+    const navItems = Object.keys(labels).map((id) => ({
+      id, label: labels[id],
+      style: page === id ? activeStyle : inactiveStyle,
+      onClick: () => this.goTo(id),
+    }));
+
+    const quickCardBase = { display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'flex-start', textAlign: 'left', background: 'white', border: '1px solid oklch(92% 0.02 200)', borderRadius: '18px', padding: '22px', cursor: 'pointer' };
+    const quickCards = [
+      { title: '本週功課', desc: '查看聯絡簿與本週作業提醒', icon: '📘', onClick: () => this.goTo('announcements'), style: quickCardBase, iconWrapStyle: { fontSize: '22px', width: '44px', height: '44px', borderRadius: '12px', background: 'oklch(94% 0.04 145)', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+      { title: '班級行事曆', desc: '掌握近期活動與重要日程', icon: '📅', onClick: () => this.goTo('calendar'), style: quickCardBase, iconWrapStyle: { fontSize: '22px', width: '44px', height: '44px', borderRadius: '12px', background: 'oklch(93% 0.04 230)', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+    ];
+
+    const tagColors = {
+      '重要': { bg: 'oklch(94% 0.06 30)', fg: 'oklch(48% 0.16 30)' },
+      '活動': { bg: 'oklch(93% 0.05 230)', fg: 'oklch(46% 0.12 230)' },
+      '作業': { bg: 'oklch(94% 0.05 145)', fg: 'oklch(44% 0.11 145)' },
+      '考試': { bg: 'oklch(93% 0.06 350)', fg: 'oklch(46% 0.14 350)' },
+      '練習': { bg: 'oklch(94% 0.04 90)', fg: 'oklch(45% 0.1 90)' },
+      '通知': { bg: 'oklch(93% 0.04 260)', fg: 'oklch(46% 0.1 260)' },
+    };
+    const rawAnnouncements = [
+      { y: 2026, m: 7, d: 17, tag: '練習', title: '數學習作第三單元練習', summary: '請完成第 12–18 頁並簽名確認。' },
+      { y: 2026, m: 7, d: 18, tag: '通知', title: '班級科展作品準備說明會', summary: '將於週三放學後於教室舉行說明會，歡迎家長參加。' },
+      { y: 2026, m: 7, d: 19, tag: '作業', title: '國語小日記本週主題：我的暑假回憶', summary: '請於週五前完成並交由導師檢閱。' },
+      { y: 2026, m: 7, d: 20, tag: '重要', title: '健康檢查表請於本週五前繳回', summary: '未繳回者將由學校統一通知補件。' },
+      { y: 2026, m: 7, d: 21, tag: '通知', title: '班級親子共讀日活動報名開始', summary: '歡迎家長與孩子一同參與，名額有限，請盡早報名。' },
+      { y: 2026, m: 7, d: 24, tag: '作業', title: '數學習作進度確認單', summary: '請家長於聯絡簿上簽名確認完成進度。' },
+      { y: 2026, m: 7, d: 25, tag: '重要', title: '9/10（三）調整為到校日，服裝為體育服', summary: '請家長留意當日交通與服裝安排，若有疑問請聯繫導師。' },
+      { y: 2026, m: 7, d: 26, tag: '作業', title: '自然觀察日記：校園植物', summary: '請於本週完成觀察紀錄並附上簡單插圖。' },
+      { y: 2026, m: 7, d: 27, tag: '通知', title: '圖書館借閱週開始', summary: '鼓勵孩子每日至圖書館借閱一本書並填寫閱讀單。' },
+      { y: 2026, m: 7, d: 28, tag: '重要', title: '開學前用品準備清單', summary: '請依清單為孩子準備開學所需文具與教材。' },
+    ];
+    const pad2 = (n) => String(n).padStart(2, '0');
+    const sourceAnnouncements = (this.state.sheetItems && this.state.sheetItems.length) ? this.state.sheetItems : rawAnnouncements;
+    const announcements = sourceAnnouncements.map((a) => ({
+      ...a, date: `${a.y}/${pad2(a.m + 1)}/${pad2(a.d)}`, dateObj: new Date(a.y, a.m, a.d),
+      tagStyle: { display: 'inline-block', fontSize: '12px', fontWeight: 700, padding: '3px 10px', borderRadius: '999px', background: tagColors[a.tag].bg, color: tagColors[a.tag].fg, flexShrink: 0, whiteSpace: 'nowrap' },
+    })).sort((a, b) => b.dateObj - a.dateObj);
+
+    const contactAnchor = new Date(this.state.contactAnchor);
+    const contactWeekdayNames = ['一', '二', '三', '四', '五'];
+    const contactMonday = new Date(contactAnchor); contactMonday.setDate(contactAnchor.getDate() - ((contactAnchor.getDay() + 6) % 7));
+    const contactWeekDays = Array.from({ length: 5 }, (_, i) => {
+      const dt = new Date(contactMonday); dt.setDate(contactMonday.getDate() + i);
+      const entries = announcements.filter((a) => a.dateObj.getFullYear() === dt.getFullYear() && a.dateObj.getMonth() === dt.getMonth() && a.dateObj.getDate() === dt.getDate()).map((a, idx) => ({ ...a, num: idx + 1 }));
+      const isToday = dt.toDateString() === new Date().toDateString();
+      return { key: dt.toISOString(), weekdayLabel: '週' + contactWeekdayNames[i], dayLabel: (dt.getMonth() + 1) + '/' + dt.getDate(), entries, hasEntries: entries.length > 0, empty: entries.length === 0, isToday };
+    });
+    const contactFriday = new Date(contactMonday); contactFriday.setDate(contactMonday.getDate() + 4);
+    const contactWeekLabel = `${contactMonday.getFullYear()}/${contactMonday.getMonth() + 1}/${contactMonday.getDate()} - ${contactFriday.getFullYear()}/${contactFriday.getMonth() + 1}/${contactFriday.getDate()}`;
+
+    const rawEvents = (this.state.calendarItems && this.state.calendarItems.length) ? this.state.calendarItems : [
+      { y: 2026, m: 7, d: 28, title: '學生返校日', time: '全天' },
+      { y: 2026, m: 7, d: 31, title: '開學日正式上課', time: '全天' },
+      { y: 2026, m: 8, d: 1, title: '新生入學', time: '全天' },
+      { y: 2026, m: 8, d: 1, title: '開學典禮、新生始業輔導', time: '全天' },
+      { y: 2026, m: 8, d: 11, title: '晚上學校日', time: '全天' },
+      { y: 2026, m: 8, d: 25, title: '中秋節', time: '全天' },
+      { y: 2026, m: 8, d: 28, title: '教師節', time: '全天' },
+      { y: 2026, m: 8, d: 29, title: '攜手班開課', time: '全天' },
+      { y: 2026, m: 9, d: 9, title: '國慶日補假', time: '全天' },
+      { y: 2026, m: 9, d: 10, title: '國慶日假期', time: '全天' },
+      { y: 2026, m: 9, d: 13, title: '基本學力檢測', time: '全天' },
+      { y: 2026, m: 9, d: 25, title: '台灣光復節', time: '全天' },
+      { y: 2026, m: 9, d: 26, title: '台灣光復節補休', time: '全天' },
+      { y: 2026, m: 10, d: 5, title: '期中評量', time: '全天' },
+      { y: 2026, m: 10, d: 6, title: '期中評量', time: '全天' },
+      { y: 2026, m: 10, d: 14, title: '體育表演會', time: '全天' },
+      { y: 2026, m: 10, d: 16, title: '體表會補假', time: '全天' },
+      { y: 2026, m: 11, d: 25, title: '行憲紀念日', time: '全天' },
+      { y: 2027, m: 0, d: 1, title: '開國紀念日', time: '全天' },
+      { y: 2027, m: 0, d: 12, title: '期末評量', time: '全天' },
+      { y: 2027, m: 0, d: 13, title: '期末評量', time: '全天' },
+      { y: 2027, m: 0, d: 20, title: '休業式', time: '全天' },
+      { y: 2027, m: 0, d: 21, title: '寒假開始', time: '全天' },
+    ];
+    const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+    const eventsOn = (date) => rawEvents.filter((e) => sameDay(new Date(e.y, e.m, e.d), date));
+
+    const anchor = new Date(this.state.calendarAnchor);
+    const weekdayNames = ['日', '一', '二', '三', '四', '五', '六'];
+    const isWeekView = this.state.calendarView === 'week';
+
+    const monthWeeks = (() => {
+      const year = anchor.getFullYear(), month = anchor.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const startWeekday = firstDay.getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const cellsRaw = [];
+      for (let i = 0; i < startWeekday; i++) cellsRaw.push(null);
+      for (let d = 1; d <= daysInMonth; d++) cellsRaw.push(new Date(year, month, d));
+      while (cellsRaw.length % 7 !== 0) cellsRaw.push(null);
+      const weeks = [];
+      for (let i = 0; i < cellsRaw.length; i += 7) {
+        weeks.push({
+          key: i, cells: cellsRaw.slice(i, i + 7).map((dt, idx) => dt ? {
+            key: dt.toISOString(), dayLabel: dt.getDate(), inMonth: true,
+            style: { minHeight: '80px', padding: '8px', borderRight: idx < 6 ? '1px solid oklch(94% 0.01 200)' : 'none' },
+            dayStyle: { fontSize: '13px', fontWeight: 600, color: 'oklch(35% 0.02 200)' },
+            events: eventsOn(dt),
+          } : {
+            key: 'blank-' + i + '-' + idx, dayLabel: '', inMonth: false,
+            style: { minHeight: '80px', padding: '8px', background: 'oklch(98% 0.005 200)', borderRight: idx < 6 ? '1px solid oklch(94% 0.01 200)' : 'none' },
+            dayStyle: {}, events: [],
+          }),
+        });
+      }
+      return weeks;
+    })();
+
+    const weekDays = (() => {
+      const start = new Date(anchor); start.setDate(anchor.getDate() - anchor.getDay());
+      return Array.from({ length: 7 }, (_, i) => {
+        const dt = new Date(start); dt.setDate(start.getDate() + i);
+        const evs = eventsOn(dt);
+        return {
+          key: dt.toISOString(), weekdayLabel: '週' + weekdayNames[i], dayLabel: dt.getMonth() + 1 + '/' + dt.getDate(),
+          dayStyle: { fontSize: '15px', fontWeight: 800, color: 'oklch(35% 0.08 145)' },
+          cardStyle: { background: 'white', border: '1px solid oklch(92% 0.02 200)', borderRadius: '14px', padding: '14px', minHeight: '120px' },
+          events: evs, empty: evs.length === 0,
+        };
+      });
+    })();
+
+    const galleryLabels = ['戶外教學花絮', '運動會精彩瞬間', '美術課作品', '班級生日會', '科展成果', '畢業旅行預告', '晨光讀書會', '母親節活動'];
+    const galleryItems = galleryLabels.map((label, i) => ({ label, id: `gallery-${i}` }));
+    const albumUrl = 'https://e.pcloud.link/publink/show?code=kZKMQy7ZL8S6JqjykvmIzdPGl3o21L6XI6s7';
+
+    const studentInfo = {
+      seat: '05', name: '張小明',
+      grades: [
+        { subject: '國語', score: 92 }, { subject: '數學', score: 88 },
+        { subject: '英語', score: 95 }, { subject: '自然', score: 90 },
+      ],
+      comment: '小明學習態度積極，課堂參與度高，數學計算能力有進步，建議加強閱讀理解速度。',
+    };
+
+    return {
+      isHome: page === 'home', isAnnouncements: page === 'announcements',
+      isCalendar: page === 'calendar', isGallery: page === 'gallery',
+      navItems, quickCards,
+      homeAnnouncements: announcements.slice(0, 3),
+      contactWeekDays: contactWeekDays.map((d) => ({
+        ...d,
+        headerStyle: { display: 'flex', alignItems: 'baseline', gap: '6px', padding: '6px 10px', borderRadius: '10px', background: d.isToday ? 'oklch(58% 0.12 145)' : 'oklch(95% 0.02 200)' },
+        weekdayStyle: { fontSize: '13px', fontWeight: 600, color: d.isToday ? 'white' : 'oklch(45% 0.02 200)' },
+        dayStyle: { fontSize: '18px', fontWeight: 800, color: d.isToday ? 'white' : 'oklch(35% 0.08 145)' },
+      })),
+      contactWeekLabel, contactPrev: this.contactPrev, contactNext: this.contactNext, contactToday: this.contactToday,
+      sheetLoading: this.state.sheetLoading, sheetError: this.state.sheetError,
+      galleryItems, albumUrl,
+      calIsMonth: !isWeekView, calIsWeek: isWeekView,
+      calLabel: isWeekView ? `${anchor.getFullYear()}/${anchor.getMonth() + 1} 第${Math.ceil((anchor.getDate()) / 7)}週` : `${anchor.getFullYear()}年${anchor.getMonth() + 1}月`,
+      calPrev: this.calPrev, calNext: this.calNext, calToday: this.calToday, calSetMonth: this.calSetMonth, calSetWeek: this.calSetWeek,
+      calMonthBtnStyle: { padding: '7px 16px', borderRadius: '9px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, background: isWeekView ? 'transparent' : 'white', color: isWeekView ? 'oklch(45% 0.02 200)' : 'oklch(35% 0.1 145)' },
+      calWeekBtnStyle: { padding: '7px 16px', borderRadius: '9px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, background: isWeekView ? 'white' : 'transparent', color: isWeekView ? 'oklch(35% 0.1 145)' : 'oklch(45% 0.02 200)' },
+      weekdayLabels: weekdayNames, monthWeeks, weekDays,
+      calendarLoading: this.state.calendarLoading, calendarError: this.state.calendarError,
+    };
+  }
+}
+</script>
+</body>
+</html>
