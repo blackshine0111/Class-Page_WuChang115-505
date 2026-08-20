@@ -127,17 +127,21 @@
         </div>
         <p style="margin:0 0 24px; color:oklch(48% 0.02 200); font-size:14px;">依週查看班級公告、活動與作業提醒</p>
 
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px; flex-wrap:wrap;">
-          <button onClick="{{ contactPrev }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">‹</button>
-          <span style="font-weight:700; font-size:16px; min-width:150px; text-align:center; white-space:nowrap;">{{ contactNavLabel }}</span>
-          <button onClick="{{ contactNext }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px;">›</button>
-          <button onClick="{{ contactToday }}" style="margin-left:6px; padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200); white-space:nowrap; flex-shrink:0;">本週</button>
-          <button onClick="{{ contactShowDay }}" style="padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200); white-space:nowrap; flex-shrink:0;">本日</button>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:18px; flex-wrap:wrap; row-gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+            <button onClick="{{ contactPrev }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px; flex-shrink:0;">‹</button>
+            <span style="font-weight:700; font-size:16px; text-align:center; white-space:nowrap;">{{ contactNavLabel }}</span>
+            <button onClick="{{ contactNext }}" style="width:34px; height:34px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:15px; flex-shrink:0;">›</button>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+            <button onClick="{{ contactToday }}" style="padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200); white-space:nowrap; flex-shrink:0;">本週</button>
+            <button onClick="{{ contactShowDay }}" style="padding:8px 14px; border-radius:10px; border:1px solid oklch(88% 0.02 200); background:white; cursor:pointer; font-size:13px; color:oklch(40% 0.02 200); white-space:nowrap; flex-shrink:0;">本日</button>
+          </div>
           <sc-if value="{{ sheetLoading }}" hint-placeholder-val="{{ false }}">
-            <span style="margin-left:10px; font-size:12px; color:oklch(55% 0.02 200);">正在同步試算表…</span>
+            <span style="font-size:12px; color:oklch(55% 0.02 200);">正在同步試算表…</span>
           </sc-if>
           <sc-if value="{{ sheetError }}" hint-placeholder-val="{{ false }}">
-            <span style="margin-left:10px; font-size:12px; color:oklch(50% 0.15 25);">{{ sheetError }}</span>
+            <span style="font-size:12px; color:oklch(50% 0.15 25);">{{ sheetError }}</span>
           </sc-if>
         </div>
 
@@ -223,7 +227,8 @@
         </div>
 
         <sc-if value="{{ calIsMonth }}" hint-placeholder-val="{{ true }}">
-          <div style="border:1px solid oklch(92% 0.02 200); border-radius:18px; overflow:hidden; background:white;">
+          <div style="overflow:auto; -webkit-overflow-scrolling:touch; max-height:70vh; border:1px solid oklch(92% 0.02 200); border-radius:18px;">
+          <div style="min-width:700px; overflow:hidden; border-radius:18px; background:white;">
             <div style="display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); background:oklch(96% 0.03 145);">
               <sc-for list="{{ weekdayLabels }}" as="wl" hint-placeholder-count="7">
                 <div style="padding:10px 4px; text-align:center; font-size:12px; font-weight:700; color:oklch(45% 0.06 145);">{{ wl }}</div>
@@ -235,12 +240,13 @@
                   <div style="{{ cell.style }}">
                     <span style="{{ cell.dayStyle }}">{{ cell.dayLabel }}</span>
                     <sc-for list="{{ cell.events }}" as="ev" hint-placeholder-count="0">
-                      <span style="display:block; font-size:11px; margin-top:3px; padding:2px 6px; border-radius:6px; background:oklch(93% 0.05 230); color:oklch(42% 0.1 230); white-space:normal; overflow-wrap:break-word; line-height:1.4;">{{ ev.title }}</span>
+                      <span style="display:block; font-size:11px; margin-top:3px; padding:2px 6px; border-radius:6px; background:oklch(93% 0.05 230); color:oklch(42% 0.1 230); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.4;">{{ ev.title }}</span>
                     </sc-for>
                   </div>
                 </sc-for>
               </div>
             </sc-for>
+          </div>
           </div>
         </sc-if>
 
