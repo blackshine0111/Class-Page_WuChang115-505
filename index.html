@@ -28,7 +28,7 @@
 
   <!-- Header -->
   <header style="position:sticky; top:0; z-index:20; background:oklch(99% 0.006 145 / 0.92); backdrop-filter:blur(8px); border-bottom:1px solid oklch(90% 0.03 145); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; padding:14px clamp(16px,4vw,48px);">
-    <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onClick="{{ () =&gt; goTo('home') }}">
+    <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onClick="{{ () => goTo('home') }}">
       <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, oklch(78% 0.09 145), oklch(80% 0.08 230)); display:flex; align-items:center; justify-content:center; font-weight:900; color:white; font-size:18px; flex-shrink:0;">5-5</div>
       <div style="display:flex; flex-direction:column; line-height:1.25;">
         <span style="font-size:12px; color:oklch(50% 0.03 200); letter-spacing:0.05em;">台北市立五常國小</span>
@@ -322,7 +322,7 @@
         <span>本網站僅供班級親師溝通使用，學生個人資料（座號、成績、請假紀錄）僅授權家長本人查閱，請勿轉發或公開分享。</span>
       </div>
     </div>
-    <div style="text-align:center; font-size:12px; color:oklch(52% 0.02 200); border-top:1px solid oklch(88% 0.02 200); padding-top:16px;">© 2026 台北市立五常國小 五年五班・溫馨園地　版權所有</div>
+    <div style="text-align:center; font-size:12px; color:oklch(52% 0.02 200); border-top:1px solid oklch(88% 0.02 200); padding-top:16px;">© 2026 台北市立五常國小 五年五班・溫馨園地 版權所有</div>
   </footer>
 </div>
 
@@ -331,13 +331,23 @@
 class Component extends DCLogic {
   state = {
     page: 'home',
+    calendarView: 'month', 
+    calendarAnchor: new Date(2026, 7, 1).toISOString(), // 錨定至 2026 年 8 月
+    contactAnchor: new Date().toISOString(),
+    contactViewMode: 'week', 
+    contactSelectedDate: new Date().toISOString(),
+    sheetItems: null, 
+    sheetLoading: true, 
+    sheetError: null,
+    calendarItems: null,
+    calendarLoading: true,
+    calendarError: null,
+
+    /* 註解：未使用的登入與請假狀態
     loggedIn: false,
     seatInput: '', codeInput: '', loginError: '',
     leaveDate: '', leaveType: '病假', leaveReason: '', leaveSubmitted: false, leaveError: '',
-    calendarView: 'month', calendarAnchor: new Date(2026, 8, 1).toISOString(),
-    contactAnchor: new Date().toISOString(),
-    contactViewMode: 'week', contactSelectedDate: new Date().toISOString(),
-    sheetItems: null, sheetLoading: true, sheetError: null,
+    */
   };
 
   componentDidMount() {
@@ -422,80 +432,53 @@ class Component extends DCLogic {
 
   fetchSheetData = () => {
     this.setState({ sheetLoading: true, sheetError: null, sheetItems: null });
-    const sheetId = '1gY2fiurdYEUBBxIiEsxHA56AigMrkJpCheyEfWbH6c8';
-    const year = new Date().getFullYear();
-    const sheetNames = Array.from({ length: 12 }, (_, i) => `${year}.${i + 1}月`);
-    let pending = sheetNames.length;
-    let combined = [];
-    let anySuccess = false;
-    const finish = () => {
-      pending -= 1;
-      if (pending <= 0) {
-        const seen = new Set();
-        const deduped = combined.filter((it) => {
-          const key = `${it.y}-${it.m}-${it.d}-${it.summary}`;
-          if (seen.has(key)) return false;
-          seen.add(key);
-          return true;
-        });
-        this.setState({
-          sheetItems: deduped.length ? deduped : null,
-          sheetLoading: false,
-          sheetError: anySuccess ? null : '無法取得試算表工作表資料，顯示預設內容',
-        });
-      }
-    };
-    sheetNames.forEach((sheetName) => {
-      const cbName = '__contactSheetCb_' + Math.random().toString(36).slice(2);
-      const script = document.createElement('script');
-      const cleanup = () => { delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); };
-      const timeoutId = setTimeout(() => { if (window[cbName]) { cleanup(); finish(); } }, 8000);
-      window[cbName] = (json) => {
-        clearTimeout(timeoutId);
-        try {
-          const rows = (json && json.table && json.table.rows) || [];
-          const items = this.parseSheetRows(rows);
-          if (items.length) { anySuccess = true; combined = combined.concat(items); }
-        } catch (e) { /* ignore this sheet */ }
-        cleanup();
-        finish();
-      };
-      script.onerror = () => { clearTimeout(timeoutId); cleanup(); finish(); };
-      script.src = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}&sheet=${encodeURIComponent(sheetName)}`;
-      document.body.appendChild(script);
-    });
-  };
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzSU_ImbX2R8PpEF0ozdeR4ixtPVoE-KC2OqS-GJSvV8vT0G_BLWanm8ey27EIVuX2K/exec';
 
-  parseSheetRows(rows) {
-    const year = new Date().getFullYear();
-    const headerRe = /(\d{1,2})月(\d{1,2})日/;
-    const items = [];
-    const colCount = rows.reduce((max, row) => Math.max(max, (row.c || []).length), 0);
-    for (let c = 0; c < colCount; c++) {
-      let current = null;
-      rows.forEach((row) => {
-        const cell = row && row.c && row.c[c];
-        const text = cell && (cell.v != null) ? String(cell.v).trim() : '';
-        if (!text) return;
-        const m = text.match(headerRe);
-        if (m && text.length <= 12) {
-          current = { y: year, m: parseInt(m[1], 10) - 1, d: parseInt(m[2], 10) };
-        } else if (current) {
-          let tag = '通知';
-          if (/考|評量|測驗/.test(text)) tag = '考試';
-          else if (/練習|習題/.test(text)) tag = '練習';
-          else if (/作|本p\.|習作/.test(text)) tag = '作業';
-          items.push({ y: current.y, m: current.m, d: current.d, tag, title: text.length > 30 ? text.slice(0, 30) + '…' : text, summary: text });
+    fetch(API_URL)
+      .then(response => {
+        if (!response.ok) throw new Error('網路回應異常');
+        return response.json();
+      })
+      .then(data => {
+        const flattened = [];
+        if (Array.isArray(data)) {
+          data.forEach(day => {
+            if (Array.isArray(day.content)) {
+              day.content.forEach(text => {
+                const cleanText = String(text).trim();
+                if (cleanText) {
+                  flattened.push({
+                    y: day.y,
+                    m: day.m - 1, // Apps Script 傳回 1~12，轉為 JS Date 的 0~11
+                    d: day.d,
+                    title: cleanText.length > 30 ? cleanText.slice(0, 30) + '…' : cleanText,
+                    summary: cleanText
+                  });
+                }
+              });
+            }
+          });
         }
+
+        this.setState({
+          sheetItems: flattened.length ? flattened : [],
+          sheetLoading: false,
+          sheetError: null,
+        });
+      })
+      .catch(error => {
+        console.error('聯絡簿載入失敗:', error);
+        this.setState({
+          sheetLoading: false,
+          sheetError: '無法取得聯絡簿資料',
+        });
       });
-    }
-    return items;
-  }
+  };
 
   effectiveContactDate = (base) => {
     const d = new Date(base);
-    if (d.getDay() === 6) d.setDate(d.getDate() - 1); // Sat -> Fri
-    else if (d.getDay() === 0) d.setDate(d.getDate() - 2); // Sun -> Fri
+    if (d.getDay() === 6) d.setDate(d.getDate() - 1); // 週六移至週五
+    else if (d.getDay() === 0) d.setDate(d.getDate() - 2); // 週日移至週五
     return d;
   };
   contactPrev = () => {
@@ -535,7 +518,7 @@ class Component extends DCLogic {
   calSetWeek = () => this.setState({ calendarView: 'week' });
   calPrev = () => this.shiftCalendar(-1);
   calNext = () => this.shiftCalendar(1);
-  calToday = () => this.setState({ calendarAnchor: new Date(2026, 8, 1).toISOString() });
+  calToday = () => this.setState({ calendarAnchor: new Date(2026, 7, 1).toISOString() });
 
   shiftCalendar(delta) {
     const d = new Date(this.state.calendarAnchor);
@@ -544,6 +527,7 @@ class Component extends DCLogic {
     this.setState({ calendarAnchor: d.toISOString() });
   }
 
+  /* 註解：未使用的登入與請假事件處理
   onSeatChange = (e) => this.setState({ seatInput: e.target.value, loginError: '' });
   onCodeChange = (e) => this.setState({ codeInput: e.target.value, loginError: '' });
 
@@ -569,6 +553,7 @@ class Component extends DCLogic {
     if (requireReason && !leaveReason.trim()) { this.setState({ leaveError: '請填寫事由說明' }); return; }
     this.setState({ leaveSubmitted: true, leaveError: '' });
   };
+  */
 
   renderVals() {
     const page = this.state.page;
@@ -589,31 +574,14 @@ class Component extends DCLogic {
       { title: '班級行事曆', desc: '掌握近期活動與重要日程', icon: '📅', onClick: () => this.goTo('calendar'), style: quickCardBase, iconWrapStyle: { fontSize: '22px', width: '44px', height: '44px', borderRadius: '12px', background: 'oklch(93% 0.04 230)', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
     ];
 
-    const tagColors = {
-      '重要': { bg: 'oklch(94% 0.06 30)', fg: 'oklch(48% 0.16 30)' },
-      '活動': { bg: 'oklch(93% 0.05 230)', fg: 'oklch(46% 0.12 230)' },
-      '作業': { bg: 'oklch(94% 0.05 145)', fg: 'oklch(44% 0.11 145)' },
-      '考試': { bg: 'oklch(93% 0.06 350)', fg: 'oklch(46% 0.14 350)' },
-      '練習': { bg: 'oklch(94% 0.04 90)', fg: 'oklch(45% 0.1 90)' },
-      '通知': { bg: 'oklch(93% 0.04 260)', fg: 'oklch(46% 0.1 260)' },
-    };
-    const rawAnnouncements = [
-      { y: 2026, m: 7, d: 17, tag: '練習', title: '數學習作第三單元練習', summary: '請完成第 12–18 頁並簽名確認。' },
-      { y: 2026, m: 7, d: 18, tag: '通知', title: '班級科展作品準備說明會', summary: '將於週三放學後於教室舉行說明會，歡迎家長參加。' },
-      { y: 2026, m: 7, d: 19, tag: '作業', title: '國語小日記本週主題：我的暑假回憶', summary: '請於週五前完成並交由導師檢閱。' },
-      { y: 2026, m: 7, d: 20, tag: '重要', title: '健康檢查表請於本週五前繳回', summary: '未繳回者將由學校統一通知補件。' },
-      { y: 2026, m: 7, d: 21, tag: '通知', title: '班級親子共讀日活動報名開始', summary: '歡迎家長與孩子一同參與，名額有限，請盡早報名。' },
-      { y: 2026, m: 7, d: 24, tag: '作業', title: '數學習作進度確認單', summary: '請家長於聯絡簿上簽名確認完成進度。' },
-      { y: 2026, m: 7, d: 25, tag: '重要', title: '9/10（三）調整為到校日，服裝為體育服', summary: '請家長留意當日交通與服裝安排，若有疑問請聯繫導師。' },
-      { y: 2026, m: 7, d: 26, tag: '作業', title: '自然觀察日記：校園植物', summary: '請於本週完成觀察紀錄並附上簡單插圖。' },
-      { y: 2026, m: 7, d: 27, tag: '通知', title: '圖書館借閱週開始', summary: '鼓勵孩子每日至圖書館借閱一本書並填寫閱讀單。' },
-      { y: 2026, m: 7, d: 28, tag: '重要', title: '開學前用品準備清單', summary: '請依清單為孩子準備開學所需文具與教材。' },
-    ];
+    // 清空假資料，避免連線完成前閃爍舊內容
+    const rawAnnouncements = [];
     const pad2 = (n) => String(n).padStart(2, '0');
     const sourceAnnouncements = (this.state.sheetItems && this.state.sheetItems.length) ? this.state.sheetItems : rawAnnouncements;
     const announcements = sourceAnnouncements.map((a) => ({
-      ...a, date: `${a.y}/${pad2(a.m + 1)}/${pad2(a.d)}`, dateObj: new Date(a.y, a.m, a.d),
-      tagStyle: { display: 'inline-block', fontSize: '12px', fontWeight: 700, padding: '3px 10px', borderRadius: '999px', background: tagColors[a.tag].bg, color: tagColors[a.tag].fg, flexShrink: 0, whiteSpace: 'nowrap' },
+      ...a, 
+      date: `${a.y}/${pad2(a.m + 1)}/${pad2(a.d)}`, 
+      dateObj: new Date(a.y, a.m, a.d)
     })).sort((a, b) => b.dateObj - a.dateObj);
 
     const contactAnchor = new Date(this.state.contactAnchor);
@@ -634,31 +602,7 @@ class Component extends DCLogic {
     const contactDayWeekdayNames = ['日', '一', '二', '三', '四', '五', '六'];
     const contactDayLabel = `${contactSelectedDateObj.getFullYear()}/${contactSelectedDateObj.getMonth() + 1}/${contactSelectedDateObj.getDate()}（週${contactDayWeekdayNames[contactSelectedDateObj.getDay()]}）`;
 
-    const rawEvents = (this.state.calendarItems && this.state.calendarItems.length) ? this.state.calendarItems : [
-      { y: 2026, m: 7, d: 28, title: '學生返校日', time: '全天' },
-      { y: 2026, m: 7, d: 31, title: '開學日正式上課', time: '全天' },
-      { y: 2026, m: 8, d: 1, title: '新生入學', time: '全天' },
-      { y: 2026, m: 8, d: 1, title: '開學典禮、新生始業輔導', time: '全天' },
-      { y: 2026, m: 8, d: 11, title: '晚上學校日', time: '全天' },
-      { y: 2026, m: 8, d: 25, title: '中秋節', time: '全天' },
-      { y: 2026, m: 8, d: 28, title: '教師節', time: '全天' },
-      { y: 2026, m: 8, d: 29, title: '攜手班開課', time: '全天' },
-      { y: 2026, m: 9, d: 9, title: '國慶日補假', time: '全天' },
-      { y: 2026, m: 9, d: 10, title: '國慶日假期', time: '全天' },
-      { y: 2026, m: 9, d: 13, title: '基本學力檢測', time: '全天' },
-      { y: 2026, m: 9, d: 25, title: '台灣光復節', time: '全天' },
-      { y: 2026, m: 9, d: 26, title: '台灣光復節補休', time: '全天' },
-      { y: 2026, m: 10, d: 5, title: '期中評量', time: '全天' },
-      { y: 2026, m: 10, d: 6, title: '期中評量', time: '全天' },
-      { y: 2026, m: 10, d: 14, title: '體育表演會', time: '全天' },
-      { y: 2026, m: 10, d: 16, title: '體表會補假', time: '全天' },
-      { y: 2026, m: 11, d: 25, title: '行憲紀念日', time: '全天' },
-      { y: 2027, m: 0, d: 1, title: '開國紀念日', time: '全天' },
-      { y: 2027, m: 0, d: 12, title: '期末評量', time: '全天' },
-      { y: 2027, m: 0, d: 13, title: '期末評量', time: '全天' },
-      { y: 2027, m: 0, d: 20, title: '休業式', time: '全天' },
-      { y: 2027, m: 0, d: 21, title: '寒假開始', time: '全天' },
-    ];
+    const rawEvents = (this.state.calendarItems && this.state.calendarItems.length) ? this.state.calendarItems : [];
     const sameDay = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
     const eventsOn = (date) => rawEvents.filter((e) => sameDay(new Date(e.y, e.m, e.d), date));
 
@@ -711,6 +655,7 @@ class Component extends DCLogic {
     const galleryItems = galleryLabels.map((label, i) => ({ label, id: `gallery-${i}` }));
     const albumUrl = 'https://e.pcloud.link/publink/show?code=kZKMQy7ZL8S6JqjykvmIzdPGl3o21L6XI6s7';
 
+    /* 註解：未使用的學生模擬資料
     const studentInfo = {
       seat: '05', name: '張小明',
       grades: [
@@ -719,6 +664,7 @@ class Component extends DCLogic {
       ],
       comment: '小明學習態度積極，課堂參與度高，數學計算能力有進步，建議加強閱讀理解速度。',
     };
+    */
 
     return {
       isHome: page === 'home', isAnnouncements: page === 'announcements',
