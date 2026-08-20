@@ -8,6 +8,7 @@
 <body>
 <x-dc>
 <helmet>
+  <link rel="icon" type="image/svg+xml" sizes="32x32" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2379c08a'/%3E%3Ctext x='16' y='21' font-family='Arial,sans-serif' font-weight='700' font-size='11' fill='white' text-anchor='middle'%3E5-5%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;display=swap" rel="stylesheet">
   <script src="./image-slot.js"></script>
@@ -22,7 +23,7 @@
 
   <!-- Header -->
   <header style="position:sticky; top:0; z-index:20; background:oklch(99% 0.006 145 / 0.92); backdrop-filter:blur(8px); border-bottom:1px solid oklch(90% 0.03 145); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; padding:14px clamp(16px,4vw,48px);">
-    <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onClick="{{ () => goTo('home') }}">
+    <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onClick="{{ goHome }}" data-comment-anchor="cc-1">
       <div style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg, oklch(78% 0.09 145), oklch(80% 0.08 230)); display:flex; align-items:center; justify-content:center; font-weight:900; color:white; font-size:18px; flex-shrink:0;">5-5</div>
       <div style="display:flex; flex-direction:column; line-height:1.25;">
         <span style="font-size:12px; color:oklch(50% 0.03 200); letter-spacing:0.05em;">台北市立五常國小</span>
@@ -566,6 +567,7 @@ class Component extends DCLogic {
     return {
       isHome: page === 'home', isAnnouncements: page === 'announcements',
       isCalendar: page === 'calendar', isGallery: page === 'gallery',
+      goTo: this.goTo, goHome: () => this.goTo('home'),
       navItems, quickCards,
       homeAnnouncements: announcements.slice(0, 3),
       contactWeekDays: contactWeekDays.map((d) => ({
