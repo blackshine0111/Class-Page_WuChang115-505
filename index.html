@@ -3,12 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<template id="__bundler_thumbnail" data-bg-color="#eaf6ee">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-    <rect width="200" height="200" fill="#eaf6ee"/>
-    <text x="100" y="120" font-size="72" text-anchor="middle" font-family="sans-serif">📖</text>
-  </svg>
-</template>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -316,38 +310,25 @@
         </div>
       </div>
     </div>
-    <div style="display:grid; grid-template-columns:1fr; max-width:1080px; margin:0 auto 24px;">
-      <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; color:oklch(45% 0.02 200); line-height:1.8;">
-        <span style="font-weight:700; color:oklch(30% 0.03 200); font-size:14px;">隱私聲明</span>
-        <span>本網站僅供班級親師溝通使用，學生個人資料（座號、成績、請假紀錄）僅授權家長本人查閱，請勿轉發或公開分享。</span>
-      </div>
-    </div>
     <div style="text-align:center; font-size:12px; color:oklch(52% 0.02 200); border-top:1px solid oklch(88% 0.02 200); padding-top:16px;">© 2026 台北市立五常國小 五年五班・溫馨園地 版權所有</div>
   </footer>
 </div>
-
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;strictLoginDemo&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;行為設定&quot;}, &quot;leaveFormRequireReason&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;行為設定&quot;}}">
 class Component extends DCLogic {
   state = {
     page: 'home',
-    calendarView: 'month', 
-    calendarAnchor: new Date(2026, 7, 1).toISOString(), // 錨定至 2026 年 8 月
+    calendarView: 'month',
+    calendarAnchor: new Date(2026, 7, 1).toISOString(),
     contactAnchor: new Date().toISOString(),
-    contactViewMode: 'week', 
+    contactViewMode: 'week',
     contactSelectedDate: new Date().toISOString(),
-    sheetItems: null, 
-    sheetLoading: true, 
+    sheetItems: null,
+    sheetLoading: true,
     sheetError: null,
     calendarItems: null,
     calendarLoading: true,
     calendarError: null,
-
-    /* 註解：未使用的登入與請假狀態
-    loggedIn: false,
-    seatInput: '', codeInput: '', loginError: '',
-    leaveDate: '', leaveType: '病假', leaveReason: '', leaveSubmitted: false, leaveError: '',
-    */
   };
 
   componentDidMount() {
@@ -357,78 +338,36 @@ class Component extends DCLogic {
 
   fetchCalendarData = () => {
     this.setState({ calendarLoading: true, calendarError: null, calendarItems: null });
-    const sheetId = '1heLqbPZQBgOZDj8TT-NL8B9p_lb8PLA2lgIWA02Ohfk';
-    const sheetNames = ['2026.08','2026.09','2026.10','2026.11','2026.12','2027.01','2027.02','2027.03','2027.04','2027.05','2027.06','2027.07'];
-    let pending = sheetNames.length;
-    let combined = [];
-    let fetchedOk = 0;
-    const finish = () => {
-      pending -= 1;
-      if (pending <= 0) {
-        this.setState({
-          calendarItems: fetchedOk > 0 ? combined : null,
-          calendarLoading: false,
-          calendarError: fetchedOk > 0 ? null : '無法連線至行事曆試算表，顯示預設內容',
-        });
-      }
-    };
-    sheetNames.forEach((sheetName) => {
-      const cbName = '__calSheetCb_' + Math.random().toString(36).slice(2);
-      const script = document.createElement('script');
-      const cleanup = () => { delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); };
-      const timeoutId = setTimeout(() => { if (window[cbName]) { cleanup(); finish(); } }, 8000);
-      window[cbName] = (json) => {
-        clearTimeout(timeoutId);
-        try {
-          const rows = (json && json.table && json.table.rows) || [];
-          fetchedOk += 1;
-          const items = this.parseCalendarRows(rows);
-          if (items.length) combined = combined.concat(items);
-        } catch (e) { /* ignore this sheet */ }
-        cleanup();
-        finish();
-      };
-      script.onerror = () => { clearTimeout(timeoutId); cleanup(); finish(); };
-      script.src = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}&sheet=${encodeURIComponent(sheetName)}`;
-      document.body.appendChild(script);
-    });
-  };
+    const API_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSrU-GltPuIl6XjwP9V5ZT4kydTUzsxh0ZhQBTG1rGf7fAqAuXjnokBo7RPMZ-TPNOxtC63QXxrP2NFL7c1OKIC-P9ydb5SUdYgYKtl5LKLjNFcPe5zSbYMwHI_UuuMd1yqOCFmcbOQDnawOvor56UgLNqL2hVcW2UXA9PjiId-oiq9BnqGkhFmXNiQDn5DU83y7CIpIqRk-qQJajK8YUQ48wfoRrd14rfzOfTwYUUnbn2sNDVqAB7PiUx5RwUgnidb-GbUPzRUCqfOCnzPR-JhWjeaug&lib=M4bUas-Kk917bqJMX2FHHy8Mq0vWOSgOC';
 
-  parseCalendarRows(rows) {
-    const excelSerialToDate = (serial) => {
-      const utcDays = Math.floor(serial - 25569);
-      const d = new Date(utcDays * 86400 * 1000);
-      return { y: d.getUTCFullYear(), m: d.getUTCMonth(), d: d.getUTCDate() };
-    };
-    const parseFullDateCell = (cell) => {
-      if (!cell || cell.v == null) return null;
-      const v = cell.v;
-      if (typeof v === 'string' && v.startsWith('Date(')) {
-        const mm = v.match(/Date\((\d+),(\d+),(\d+)/);
-        if (mm) return { y: parseInt(mm[1], 10), m: parseInt(mm[2], 10), d: parseInt(mm[3], 10) };
-      }
-      if (typeof v === 'number' && v > 20000 && v < 60000) return excelSerialToDate(v);
-      return null;
-    };
-    const items = [];
-    for (let r = 0; r < rows.length - 1; r++) {
-      const cells = (rows[r] && rows[r].c) || [];
-      const nextCells = (rows[r + 1] && rows[r + 1].c) || [];
-      for (let c = 0; c < cells.length; c++) {
-        const date = parseFullDateCell(cells[c]);
-        if (!date) continue;
-        const noteCell = nextCells[c];
-        if (parseFullDateCell(noteCell)) continue;
-        const noteText = noteCell && noteCell.v != null ? String(noteCell.v).trim() : '';
-        if (!noteText || noteText.startsWith('Date(')) continue;
-        noteText.split(/\n+/).forEach((line) => {
-          const title = line.trim();
-          if (title && !title.startsWith('Date(')) items.push({ y: date.y, m: date.m, d: date.d, title, time: '全天' });
+    fetch(API_URL)
+      .then((response) => {
+        if (!response.ok) throw new Error('網路回應異常');
+        return response.json();
+      })
+      .then((data) => {
+        const items = [];
+        if (Array.isArray(data)) {
+          data.forEach((day) => {
+            if (Array.isArray(day.content)) {
+              day.content.forEach((text) => {
+                const title = String(text).trim();
+                if (title) items.push({ y: day.y, m: day.m - 1, d: day.d, title, time: '全天' });
+              });
+            }
+          });
+        }
+        this.setState({
+          calendarItems: items.length ? items : [],
+          calendarLoading: false,
+          calendarError: null,
         });
-      }
-    }
-    return items;
-  }
+      })
+      .catch((error) => {
+        console.error('行事曆載入失敗:', error);
+        this.setState({ calendarLoading: false, calendarError: '無法取得行事曆資料' });
+      });
+  };
 
   fetchSheetData = () => {
     this.setState({ sheetLoading: true, sheetError: null, sheetItems: null });
@@ -449,7 +388,7 @@ class Component extends DCLogic {
                 if (cleanText) {
                   flattened.push({
                     y: day.y,
-                    m: day.m - 1, // Apps Script 傳回 1~12，轉為 JS Date 的 0~11
+                    m: day.m - 1,
                     d: day.d,
                     title: cleanText.length > 30 ? cleanText.slice(0, 30) + '…' : cleanText,
                     summary: cleanText
@@ -477,8 +416,8 @@ class Component extends DCLogic {
 
   effectiveContactDate = (base) => {
     const d = new Date(base);
-    if (d.getDay() === 6) d.setDate(d.getDate() - 1); // 週六移至週五
-    else if (d.getDay() === 0) d.setDate(d.getDate() - 2); // 週日移至週五
+    if (d.getDay() === 6) d.setDate(d.getDate() - 1);
+    else if (d.getDay() === 0) d.setDate(d.getDate() - 2);
     return d;
   };
   contactPrev = () => {
@@ -527,34 +466,6 @@ class Component extends DCLogic {
     this.setState({ calendarAnchor: d.toISOString() });
   }
 
-  /* 註解：未使用的登入與請假事件處理
-  onSeatChange = (e) => this.setState({ seatInput: e.target.value, loginError: '' });
-  onCodeChange = (e) => this.setState({ codeInput: e.target.value, loginError: '' });
-
-  handleLogin = () => {
-    const { seatInput, codeInput } = this.state;
-    if (!seatInput.trim()) { this.setState({ loginError: '請輸入學生座號' }); return; }
-    const strict = this.props.strictLoginDemo ?? false;
-    if (strict && codeInput.trim() !== '1234') { this.setState({ loginError: '驗證碼錯誤，示範代碼為 1234' }); return; }
-    if (!strict && !codeInput.trim()) { this.setState({ loginError: '請輸入驗證碼' }); return; }
-    this.setState({ loggedIn: true, loginError: '' });
-  };
-
-  handleLogout = () => this.setState({ loggedIn: false, seatInput: '', codeInput: '', leaveSubmitted: false });
-
-  onLeaveDateChange = (e) => this.setState({ leaveDate: e.target.value, leaveError: '' });
-  onLeaveTypeChange = (e) => this.setState({ leaveType: e.target.value });
-  onLeaveReasonChange = (e) => this.setState({ leaveReason: e.target.value, leaveError: '' });
-
-  handleLeaveSubmit = () => {
-    const { leaveDate, leaveReason } = this.state;
-    const requireReason = this.props.leaveFormRequireReason ?? true;
-    if (!leaveDate) { this.setState({ leaveError: '請選擇請假日期' }); return; }
-    if (requireReason && !leaveReason.trim()) { this.setState({ leaveError: '請填寫事由說明' }); return; }
-    this.setState({ leaveSubmitted: true, leaveError: '' });
-  };
-  */
-
   renderVals() {
     const page = this.state.page;
     const green = 'oklch(58% 0.12 145)';
@@ -574,13 +485,12 @@ class Component extends DCLogic {
       { title: '班級行事曆', desc: '掌握近期活動與重要日程', icon: '📅', onClick: () => this.goTo('calendar'), style: quickCardBase, iconWrapStyle: { fontSize: '22px', width: '44px', height: '44px', borderRadius: '12px', background: 'oklch(93% 0.04 230)', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
     ];
 
-    // 清空假資料，避免連線完成前閃爍舊內容
     const rawAnnouncements = [];
     const pad2 = (n) => String(n).padStart(2, '0');
     const sourceAnnouncements = (this.state.sheetItems && this.state.sheetItems.length) ? this.state.sheetItems : rawAnnouncements;
     const announcements = sourceAnnouncements.map((a) => ({
-      ...a, 
-      date: `${a.y}/${pad2(a.m + 1)}/${pad2(a.d)}`, 
+      ...a,
+      date: `${a.y}/${pad2(a.m + 1)}/${pad2(a.d)}`,
       dateObj: new Date(a.y, a.m, a.d)
     })).sort((a, b) => b.dateObj - a.dateObj);
 
@@ -651,20 +561,7 @@ class Component extends DCLogic {
       });
     })();
 
-    const galleryLabels = ['戶外教學花絮', '運動會精彩瞬間', '美術課作品', '班級生日會', '科展成果', '畢業旅行預告', '晨光讀書會', '母親節活動'];
-    const galleryItems = galleryLabels.map((label, i) => ({ label, id: `gallery-${i}` }));
     const albumUrl = 'https://e.pcloud.link/publink/show?code=kZKMQy7ZL8S6JqjykvmIzdPGl3o21L6XI6s7';
-
-    /* 註解：未使用的學生模擬資料
-    const studentInfo = {
-      seat: '05', name: '張小明',
-      grades: [
-        { subject: '國語', score: 92 }, { subject: '數學', score: 88 },
-        { subject: '英語', score: 95 }, { subject: '自然', score: 90 },
-      ],
-      comment: '小明學習態度積極，課堂參與度高，數學計算能力有進步，建議加強閱讀理解速度。',
-    };
-    */
 
     return {
       isHome: page === 'home', isAnnouncements: page === 'announcements',
@@ -684,7 +581,7 @@ class Component extends DCLogic {
       contactDayLabel, contactDayEntries, contactDayHasEntries: contactDayEntries.length > 0, contactDayEmpty: contactDayEntries.length === 0,
       contactNavLabel: isContactDayMode ? contactDayLabel : contactWeekLabel,
       sheetLoading: this.state.sheetLoading, sheetError: this.state.sheetError,
-      galleryItems, albumUrl,
+      albumUrl,
       calIsMonth: !isWeekView, calIsWeek: isWeekView,
       calLabel: isWeekView ? `${anchor.getFullYear()}/${anchor.getMonth() + 1} 第${Math.ceil((anchor.getDate()) / 7)}週` : `${anchor.getFullYear()}年${anchor.getMonth() + 1}月`,
       calPrev: this.calPrev, calNext: this.calNext, calToday: this.calToday, calSetMonth: this.calSetMonth, calSetWeek: this.calSetWeek,
@@ -695,6 +592,7 @@ class Component extends DCLogic {
     };
   }
 }
+
 </script>
 </body>
 </html>
