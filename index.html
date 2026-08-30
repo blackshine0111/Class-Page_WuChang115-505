@@ -52,6 +52,36 @@
           </div>
         </div>
 
+        <div style="margin:0 clamp(16px,3vw,32px) 40px;">
+          <h2 style="font-size:20px; font-weight:800; margin:0 0 4px; color:oklch(30% 0.03 200);">重大行事曆</h2>
+          <p style="margin:0 0 16px; color:oklch(48% 0.02 200); font-size:13px;">本學期重要日程一覽，點選右側日期可切換圖卡</p>
+          <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:stretch; background:white; border:1px solid oklch(92% 0.02 200); border-radius:22px; padding:clamp(14px,2vw,22px); box-shadow:0 4px 18px oklch(60% 0.05 200 / 0.07);">
+            <div style="display:flex; flex-direction:column; min-height:0; flex:0 1 460px; min-width:260px;">
+              <div onTouchStart="{{ bigTouchStart }}" onTouchEnd="{{ bigTouchEnd }}" style="position:relative; width:100%; aspect-ratio:1110 / 1000; border-radius:16px; overflow:hidden; background:oklch(97% 0.01 200); touch-action:pan-y;">
+                <sc-for list="{{ bigSlides }}" as="s" hint-placeholder-count="0">
+                  <img src="{{ s.src }}" alt="{{ s.label }}" style="{{ s.imgStyle }}" />
+                </sc-for>
+                <button onClick="{{ bigPrev }}" style="position:absolute; left:8px; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%; border:none; background:oklch(100% 0 0 / 0.82); box-shadow:0 2px 8px oklch(40% 0.05 200 / 0.2); cursor:pointer; font-size:16px; color:oklch(35% 0.05 200);">‹</button>
+                <button onClick="{{ bigNext }}" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%; border:none; background:oklch(100% 0 0 / 0.82); box-shadow:0 2px 8px oklch(40% 0.05 200 / 0.2); cursor:pointer; font-size:16px; color:oklch(35% 0.05 200);">›</button>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:auto; padding-top:10px;">
+                <span style="font-size:14px; font-weight:700; color:oklch(32% 0.04 200);">{{ bigSlideTitle }}</span>
+                <span style="font-size:12px; color:oklch(52% 0.02 200); white-space:nowrap;">{{ bigSlideCounter }}</span>
+              </div>
+            </div>
+            <div style="position:relative; flex:1 1 260px; min-width:0; min-height:320px; align-self:stretch;">
+              <div style="position:absolute; inset:0; display:flex; flex-direction:column; gap:4px; overflow-y:auto; -webkit-overflow-scrolling:touch; touch-action:pan-y; overscroll-behavior:contain; padding-right:4px;">
+                <sc-for list="{{ bigEvents }}" as="ev" hint-placeholder-count="19">
+                  <button onClick="{{ ev.onClick }}" style="{{ ev.style }}">
+                    <span style="flex:none;">☀️</span>
+                    <span style="text-align:left;">{{ ev.label }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; margin:0 clamp(16px,3vw,32px) 40px;">
           <sc-for list="{{ quickCards }}" as="card" hint-placeholder-count="3">
             <button style="{{ card.style }}" onClick="{{ card.onClick }}">
@@ -97,7 +127,7 @@
               </div>
               <span style="font-size:17px; font-weight:700; color:oklch(30% 0.03 200); display:flex; align-items:center; flex:1;">教育部因材網</span>
             </a>
-            <a href="https://dict.concised.moe.edu.tw/search.jsp?la=0&powerMode=0" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:10px; background:white; border:1px solid oklch(92% 0.02 200); border-radius:18px; padding:20px 14px; text-decoration:none; text-align:center; min-height:200px;">
+            <a href="https://dict.concised.moe.edu.tw/search.jsp?la=0&amp;powerMode=0" target="_blank" rel="noopener" style="display:flex; flex-direction:column; align-items:center; gap:10px; background:white; border:1px solid oklch(92% 0.02 200); border-radius:18px; padding:20px 14px; text-decoration:none; text-align:center; min-height:200px;">
               <div style="height:136px; display:flex; align-items:center; justify-content:center;">
                 <div style="width:136px; height:136px; border-radius:14px; overflow:hidden; background:white; display:flex; align-items:center; justify-content:center;">
                   <img src="uploads/pasted-1786937233833-0.png" alt="教育部國語辭典" style="width:100%; height:100%; object-fit:contain;">
@@ -195,6 +225,23 @@
       </section>
     </sc-if>
 
+    <!-- SCHEDULE -->
+    <sc-if value="{{ isSchedule }}" hint-placeholder-val="{{ false }}">
+      <section style="padding:32px clamp(16px,3vw,32px) 56px;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
+          <span style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg, oklch(78% 0.09 145), oklch(80% 0.08 230)); display:flex; align-items:center; justify-content:center; font-size:20px;">🗓️</span>
+          <h1 style="font-size:26px; font-weight:800; margin:0;">班級課表</h1>
+        </div>
+        <p style="margin:0 0 24px; color:oklch(48% 0.02 200); font-size:14px;">115 學年度 五年五班 日課表</p>
+        <div style="border-radius:22px; overflow:hidden; border:1px solid oklch(92% 0.02 200); box-shadow:0 6px 22px oklch(60% 0.05 200 / 0.08); background:white;">
+          <img src="uploads/桌布課表.png" alt="五年五班日課表" style="width:100%; height:auto; display:block;">
+        </div>
+        <div style="display:flex; justify-content:center; margin-top:20px;">
+          <a href="uploads/桌布課表.png" download="五年五班課表.png" style="padding:12px 24px; border-radius:12px; background:oklch(58% 0.12 145); color:white; font-weight:700; font-size:14px; text-decoration:none;">下載課表圖片</a>
+        </div>
+      </section>
+    </sc-if>
+
     <!-- CALENDAR -->
     <sc-if value="{{ isCalendar }}" hint-placeholder-val="{{ false }}">
       <section style="padding:32px clamp(16px,3vw,32px) 56px;">
@@ -222,8 +269,14 @@
         </div>
 
         <sc-if value="{{ calIsMonth }}" hint-placeholder-val="{{ true }}">
-          <div style="overflow:auto; -webkit-overflow-scrolling:touch; max-height:70vh; border:1px solid oklch(92% 0.02 200); border-radius:18px;">
-          <div style="min-width:700px; overflow:hidden; border-radius:18px; background:white;">
+          <div style="display:flex; align-items:center; justify-content:flex-end; gap:6px; margin-bottom:8px;">
+            
+            <button onClick="{{ calZoomOut }}" style="width:30px; height:30px; border-radius:9px; border:1px solid oklch(90% 0.02 200); background:white; cursor:pointer; font-size:16px; font-weight:700; color:oklch(40% 0.05 200); line-height:1;">−</button>
+            <button onClick="{{ calZoomReset }}" style="min-width:48px; height:30px; padding:0 8px; border-radius:9px; border:1px solid oklch(90% 0.02 200); background:white; cursor:pointer; font-size:11px; font-weight:700; color:oklch(40% 0.05 200);">{{ calZoomLabel }}</button>
+            <button onClick="{{ calZoomIn }}" style="width:30px; height:30px; border-radius:9px; border:1px solid oklch(90% 0.02 200); background:white; cursor:pointer; font-size:16px; font-weight:700; color:oklch(40% 0.05 200); line-height:1;">+</button>
+          </div>
+          <div ref="{{ calViewportRef }}" style="overflow:auto; -webkit-overflow-scrolling:touch; max-height:70vh; border:1px solid oklch(92% 0.02 200); border-radius:18px; touch-action:pan-x pan-y;">
+          <div style="{{ calZoomStyle }}">
             <div style="display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); background:oklch(96% 0.03 145);">
               <sc-for list="{{ weekdayLabels }}" as="wl" hint-placeholder-count="7">
                 <div style="padding:10px 4px; text-align:center; font-size:12px; font-weight:700; color:oklch(45% 0.06 145);">{{ wl }}</div>
@@ -330,12 +383,85 @@ class Component extends DCLogic {
     calendarItems: null,
     calendarLoading: true,
     calendarError: null,
+    calZoom: 1,
+    bigIndex: 0,
   };
+
+  bigEventList = [
+    { img: '3.png', label: '08/31 (一) 開學日正式上課' },
+    { img: '4.png', label: '09/07 (一) 課外社團活動開課' },
+    { img: '5.png', label: '09/11 (五) 晚上學校日' },
+    { img: '6.png', label: '09/25 (五) 中秋節放假' },
+    { img: '7.png', label: '09/28 (一) 教師節放假' },
+    { img: '8.png', label: '09/29 (二) 攜手班開課' },
+    { img: '9.png', label: '10/09 (五) 國慶日補假' },
+    { img: '10.png', label: '10/13 (二) 五年級基本學力檢測' },
+    { img: '11.png', label: '10/26 (一) 台灣光復節補假' },
+    { img: '12.png', label: '11/05 (四)-11/06 (五) 期中評量' },
+    { img: '13.png', label: '11/14 (六) 體育表演會' },
+    { img: '14.png', label: '11/16 (一) 體表會補假' },
+    { img: '15.png', label: '12/25 (五) 行憲紀念日放假' },
+    { img: '16.png', label: '116/01/01 (五) 開國紀念日放假' },
+    { img: '17.png', label: '116/01/12 (二)-01/13 (三) 期末評量' },
+    { img: '18.png', label: '116/01/19 (二) 各類課後班最後一次上課' },
+    { img: '19.png', label: '116/01/20 (三) 休業式' },
+    { img: '20.png', label: '116/01/21 (四) 寒假開始' },
+    { img: '21.png', label: '116/02/11 (四) 下學期開始上課' },
+  ];
+
+  bigTouchStart = (e) => {
+    const t = e.touches[0];
+    this.bigSwipe = { x: t.clientX, y: t.clientY };
+  };
+
+  bigTouchEnd = (e) => {
+    if (!this.bigSwipe) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - this.bigSwipe.x;
+    const dy = t.clientY - this.bigSwipe.y;
+    this.bigSwipe = null;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+      if (dx < 0) this.bigNext(); else this.bigPrev();
+    }
+  };
+
+  bigPrev = () => this.setState((s) => ({ bigIndex: (s.bigIndex - 1 + this.bigEventList.length) % this.bigEventList.length }));
+  bigNext = () => this.setState((s) => ({ bigIndex: (s.bigIndex + 1) % this.bigEventList.length }));
+
+  calViewportRef = React.createRef();
+  pinchStart = null;
 
   componentDidMount() {
     this.fetchSheetData();
     this.fetchCalendarData();
+    this.attachPinch();
   }
+
+  componentDidUpdate() { this.attachPinch(); }
+
+  attachPinch = () => {
+    const el = this.calViewportRef.current;
+    if (!el || el.__pinchBound) return;
+    el.__pinchBound = true;
+    const dist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    el.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        this.pinchStart = { d: dist(e.touches), z: this.state.calZoom };
+      }
+    }, { passive: true });
+    el.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && this.pinchStart) {
+        e.preventDefault();
+        const z = Math.min(2.5, Math.max(0.4, this.pinchStart.z * (dist(e.touches) / this.pinchStart.d)));
+        this.setState({ calZoom: Math.round(z * 100) / 100 });
+      }
+    }, { passive: false });
+    el.addEventListener('touchend', () => { this.pinchStart = null; }, { passive: true });
+  };
+
+  calZoomIn = () => this.setState((s) => ({ calZoom: Math.min(2.5, Math.round((s.calZoom + 0.2) * 100) / 100) }));
+  calZoomOut = () => this.setState((s) => ({ calZoom: Math.max(0.4, Math.round((s.calZoom - 0.2) * 100) / 100) }));
+  calZoomReset = () => this.setState({ calZoom: 1 });
 
   fetchCalendarData = () => {
     this.setState({ calendarLoading: true, calendarError: null, calendarItems: null });
@@ -473,7 +599,7 @@ class Component extends DCLogic {
     const activeStyle = { padding: '9px 16px', borderRadius: '10px', border: 'none', background: green, color: 'white', fontWeight: 700, fontSize: '14px', cursor: 'pointer' };
     const inactiveStyle = { padding: '9px 16px', borderRadius: '10px', border: 'none', background: 'transparent', color: 'oklch(35% 0.02 200)', fontWeight: 600, fontSize: '14px', cursor: 'pointer' };
 
-    const labels = { home: '首頁', announcements: '聯絡簿', calendar: '行事曆', gallery: '相簿花絮' };
+    const labels = { home: '首頁', announcements: '聯絡簿', schedule: '班級課表', calendar: '行事曆', gallery: '相簿花絮' };
     const navItems = Object.keys(labels).map((id) => ({
       id, label: labels[id],
       style: page === id ? activeStyle : inactiveStyle,
@@ -565,10 +691,37 @@ class Component extends DCLogic {
     const albumUrl = 'https://e.pcloud.link/publink/show?code=kZKMQy7ZL8S6JqjykvmIzdPGl3o21L6XI6s7';
 
     return {
-      isHome: page === 'home', isAnnouncements: page === 'announcements',
+      isHome: page === 'home', isAnnouncements: page === 'announcements', isSchedule: page === 'schedule',
       isCalendar: page === 'calendar', isGallery: page === 'gallery',
       goTo: this.goTo, goHome: () => this.goTo('home'),
       navItems, quickCards,
+      bigSlides: this.bigEventList.map((ev, i) => ({
+        key: ev.img, src: 'uploads/calendar/' + ev.img, label: ev.label,
+        imgStyle: {
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', display: 'block',
+          opacity: i === this.state.bigIndex ? 1 : 0,
+          transition: 'opacity .18s ease',
+          pointerEvents: 'none',
+        },
+      })),
+      bigSlideTitle: this.bigEventList[this.state.bigIndex].label,
+      bigSlideCounter: (this.state.bigIndex + 1) + ' / ' + this.bigEventList.length,
+      bigPrev: this.bigPrev, bigNext: this.bigNext,
+      bigTouchStart: this.bigTouchStart, bigTouchEnd: this.bigTouchEnd,
+      bigEvents: this.bigEventList.map((ev, i) => ({
+        key: ev.img, label: ev.label,
+        onClick: () => this.setState({ bigIndex: i }),
+        style: {
+          display: 'flex', gap: '8px', alignItems: 'flex-start', width: '100%',
+          padding: '9px 12px', borderRadius: '11px', cursor: 'pointer',
+          border: '1px solid ' + (i === this.state.bigIndex ? 'oklch(80% 0.09 145)' : 'transparent'),
+          background: i === this.state.bigIndex ? 'oklch(96% 0.04 145)' : 'transparent',
+          fontSize: '13.5px', lineHeight: 1.5,
+          fontWeight: i === this.state.bigIndex ? 700 : 500,
+          color: i === this.state.bigIndex ? 'oklch(34% 0.09 145)' : 'oklch(40% 0.02 200)',
+        },
+      })),
       homeAnnouncements: announcements.slice(0, 3),
       contactWeekDays: contactWeekDays.map((d) => ({
         ...d,
@@ -590,6 +743,10 @@ class Component extends DCLogic {
       calMonthBtnStyle: { padding: '7px 16px', borderRadius: '9px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, background: isWeekView ? 'transparent' : 'white', color: isWeekView ? 'oklch(45% 0.02 200)' : 'oklch(35% 0.1 145)' },
       calWeekBtnStyle: { padding: '7px 16px', borderRadius: '9px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 700, background: isWeekView ? 'white' : 'transparent', color: isWeekView ? 'oklch(35% 0.1 145)' : 'oklch(45% 0.02 200)' },
       weekdayLabels: weekdayNames, monthWeeks, weekDays,
+      calViewportRef: this.calViewportRef,
+      calZoomIn: this.calZoomIn, calZoomOut: this.calZoomOut, calZoomReset: this.calZoomReset,
+      calZoomLabel: Math.round(this.state.calZoom * 100) + '%',
+      calZoomStyle: { minWidth: '700px', overflow: 'hidden', borderRadius: '18px', background: 'white', zoom: this.state.calZoom },
       calendarLoading: this.state.calendarLoading, calendarError: this.state.calendarError,
     };
   }
